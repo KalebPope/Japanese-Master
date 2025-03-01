@@ -15,6 +15,7 @@ export const DarkModeContext = createContext<DarkModeType>({
 // Provides the dark mode to all the children
 
 export const DarkModeProvider = ({ children }: { children: ReactNode }) => {
+  
   // Gets the darkmode item from local storage
 
   const userTheme = localStorage.getItem("darkMode");
