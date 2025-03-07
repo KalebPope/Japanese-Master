@@ -1,12 +1,11 @@
-import { Routes, Route } from "react-router";
-import Home from "../pages/Home/Home";
-import Lessons from "../pages/Lessons/Lessons";
+import MainRoutes from "./MainRoutes";
+import MethodRoutes from "./MethodRoutes";
 
-export default function RouteConfig () {
+export default function RouteConfig(){
     return (
-    <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/lessons" element={<Lessons />} />
-    </Routes>
+    <>
+        <MainRoutes />
+        <MethodRoutes />
+    </>
     )
 }
