@@ -11,7 +11,6 @@ export const DarkModeContext = createContext<DarkModeType>({
 });
 
 export const DarkModeProvider = ({ children }: { children: ReactNode }) => {
-
   const userTheme = localStorage.getItem("darkMode");
 
   const initialUserTheme = userTheme ? JSON.parse(userTheme) : false;
