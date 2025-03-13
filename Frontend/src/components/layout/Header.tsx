@@ -8,7 +8,7 @@ export default function Header() {
 
   return (
     <div className="grid grid-cols-[1fr_2fr_1fr] py-5 px-4 dark:text-white dark:bg-black">
-      <h1 className="">Nihongo Master</h1>
+      <h1 className="">Japanese Master</h1>
       <div className="flex justify-center gap-4">
         <a href="/">Home</a>
         <div className="relative">

@@ -32,9 +32,15 @@ export default function Introduction() {
         <span className="text-red-400">見 </span>
         <span className="text-green-400"> ます</span>
         </p>
+        <p>Translation: I watch TV everyday</p>
       <p>Looks scary right? with some practice, this sentence can be easy to understand!</p>
-      <p>First lets look at the first writing system: Hiragana. these are highlighted in green.</p>
-      <p></p>
+      <p>First lets look at the first writing system: Hiragana. these are highlighted in green. It is mainly used for grammar, which
+        in this example is used to introduce a topic, conjugate a verb and show the use of a direct object.
+      </p>
+      <p>The characters highlighted in yellow are Katakana, which are used mainly for foreign borrowed words and scientific words.
+      </p>
+      <p>The final characters are the hardest to get but are the most common. They are called kanji and make up the words of the language.</p>
+      <p>Each of these 3 scripts are essential to master to read and understand the language.</p>
 
       <h1>Bonus: History of Japanese language</h1>
       <p>Although little is known about when Japanese was first used, at first it was a spoken language. Then around the 3rd
