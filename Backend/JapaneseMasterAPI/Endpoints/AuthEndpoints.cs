@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using JapaneseMasterAPI.Services;
 using JapaneseMasterAPI.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc;
 
 namespace JapaneseMasterAPI.Endpoints
 {
@@ -15,6 +16,10 @@ namespace JapaneseMasterAPI.Endpoints
             app.MapPost("api/auth/signup", Signup);
 
             app.MapPost("api/auth/login", Login);
+
+            app.MapPost("api/auth/refresh-token", RefreshTokenRequest);
+
+            app.MapGet("api/auth/verify", AuthOnly).RequireAuthorization("Admin");
             
         }
 
@@ -53,11 +58,31 @@ namespace JapaneseMasterAPI.Endpoints
                 return Results.BadRequest("Password is incorrect");
             }
 
-            string token = tokenService.CreateToken(user);
+            var response = new TokenResponseDto
+            {
+                AccessToken = tokenService.CreateToken(user),
+                RefreshToken = await tokenService.SaveRefreshToken(user, context)
+            };
 
-            return Results.Ok(token);
+            return Results.Ok(response);
         }
 
+        private static async Task<IResult> RefreshTokenRequest(JMDbContext context, RefreshTokenDto request, TokenService tokenService)
+        {
+            var response = await tokenService.RefreshToken(request, context);
+
+            if (response == null)
+            {
+                return Results.Unauthorized();
+            }
+
+            return Results.Ok(response);
+        }
+
+        private static IResult AuthOnly()
+        {
+            return Results.Ok("Authenticated");
+        }
 
     }
 }

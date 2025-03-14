@@ -1,6 +1,4 @@
-﻿using JapaneseMasterAPI.Exceptions;
-using Microsoft.AspNetCore.Mvc;
-using System.Text.Json;
+﻿using Microsoft.AspNetCore.Mvc;
 
 namespace JapaneseMasterAPI.Middlewares
 {
