@@ -1,7 +1,7 @@
 import { Route, Routes } from "react-router-dom";
-import Immersion from "../pages/Methods/Immersion";
-import Basics from "../pages/Methods/Immersion/Basics";
-import Introduction from "../pages/Methods/Immersion/Introduction";
+import Immersion from "../pages/courses/Immersion";
+import Basics from "../pages/courses/immersion/Basics";
+import Introduction from "../pages/courses/immersion/Introduction";
 
 export default function MethodRoutes() {
   return (

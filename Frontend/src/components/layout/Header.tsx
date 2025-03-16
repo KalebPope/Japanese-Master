@@ -5,7 +5,7 @@ export default function Header() {
 
   return (
     <div className="grid grid-cols-[1fr_2fr_1fr] py-5 px-5 text-xl dark:text-white dark:bg-black">
-      <h1 className="">Japanese Master</h1>
+      <h1 className="font-nuku1 text-red-500 text-2xl">Japanese Master</h1>
       <div className="flex justify-center gap-4">
         <Link to="/">Home</Link>
         <Link to="/immersion">Courses</Link>
