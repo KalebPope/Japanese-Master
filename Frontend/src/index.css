@@ -20,8 +20,18 @@
       background-image: url('./assets/images/7954960.jpg');
     }
     .h-calc {
-        height: calc(100vh - 60px);
+        height: calc(100vh - 75px);
     }
+
+    .scroll-hide::-webkit-scrollbar {
+      display: none;
+  }
+  
+  .scroll-hide {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+  }
+
   }
 
 @keyframes scroll-left-to-right {

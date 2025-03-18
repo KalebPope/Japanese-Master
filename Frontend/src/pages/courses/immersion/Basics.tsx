@@ -8,6 +8,13 @@ export default function Basics() {
 
   const [currentSlide, setCurrentSlide] = useState(0);
 
+    const preventScroll = (e: Event) => {
+    if (currentSlide === 0 || currentSlide === 2) {
+      e.preventDefault();
+    }
+  };
+
+
   const scroll = (direction: string) => {
 
     if (scrollRef.current) {
@@ -31,7 +38,7 @@ export default function Basics() {
 
     if (scrollRef.current) {
 
-      scrollRef.current.scrollLeft = 250;
+      scrollRef.current.scrollLeft = 1000;
 
     }
 
@@ -42,9 +49,9 @@ export default function Basics() {
       <div className="flex items-center relative">
         <div
           ref={scrollRef}
-          className="relative flex w-full gap-6 snap-x snap-center snap-mandatory overflow-x-auto h-calc justify-items-center items-center">
+          className="relative flex w-full gap-6 snap-x snap-center snap-mandatory overflow-x-auto scroll-hide h-calc justify-items-center items-center">
           <div className="shrink-0 snap-center">
-            <span className="w-250 h-150 shrink-0 ml-auto flex items-center justify-center" />
+            <span className="w-250 h-150 shrink-0 flex items-center justify-center" />
           </div>
           <div className="shrink-0 snap-center relative">
             <Link
@@ -64,7 +71,7 @@ export default function Basics() {
             </a>
           </div>
           <div className="shrink-0 snap-center">
-            <span className="w-250 h-150 shrink-0 ml-auto flex items-center justify-center" />
+            <span className="w-250 h-150 shrink-0 flex items-center justify-center" />
           </div>
         </div>
         <button
