@@ -2,53 +2,49 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
-
 @font-face {
-    font-family: Nuku1;
-    font-display: swap;
-    src: url("./assets/fonts/nuku1.ttf") format("truetype");
+  font-family: Nuku1;
+  font-display: swap;
+  src: url("./assets/fonts/nuku1.ttf") format("truetype");
 }
 
 @theme {
-    --font-nuku1: Nuku1, sans-serif;
-    --animate-scroll: scroll-left-to-right 20s linear infinite;
-    
+  --font-nuku1: Nuku1, sans-serif;
+  --animate-scroll: scroll-left-to-right 20s linear infinite;
 }
 
 @layer utilities {
-    .bg-custom {
-      background-image: url('./assets/images/7954960.jpg');
-    }
-    .h-calc {
-        height: calc(100vh - 75px);
-    }
-
-    .scroll-hide::-webkit-scrollbar {
-      display: none;
+  .bg-custom {
+    background-image: url("./assets/images/7954960.jpg");
   }
-  
+  .h-calc {
+    height: calc(100vh - 75px);
+  }
+
+  .scroll-hide::-webkit-scrollbar {
+    display: none;
+  }
+
   .scroll-hide {
-      -ms-overflow-style: none;
-      scrollbar-width: none;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
   }
-
-  }
+}
 
 @keyframes scroll-left-to-right {
-    from {
-      transform: translateX(-100%);
-    }
+  from {
+    transform: translateX(-100%);
+  }
 
-    to {
-        transform: translateX(0%);
-      }
+  to {
+    transform: translateX(0%);
+  }
 }
 
-*{
-    box-sizing: border-box;
+* {
+  box-sizing: border-box;
 }
-
 
 body {
-    font-family: Arial, Helvetica, sans-serif;
+  font-family: Arial, Helvetica, sans-serif;
 }

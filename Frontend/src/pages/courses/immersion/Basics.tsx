@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, MouseEvent } from "react";
 import { Link } from "react-router-dom";
 
 export default function Basics() {
@@ -13,69 +13,101 @@ export default function Basics() {
         scrollRef.current.scrollBy({ left: -1000, behavior: "smooth" });
 
         setCurrentSlide((prev) => prev - 1);
-      } else if (direction == "Right" && currentSlide <= 1) {
+      } else if (direction == "Right" && currentSlide < 2) {
         setCurrentSlide((prev) => prev + 1);
 
         scrollRef.current.scrollBy({ left: 1000, behavior: "smooth" });
-
       }
     }
   };
-  
+
+  // Resizing
+
   const [windowWidth, setWindowWidth] = useState<number>(window.innerWidth);
-  const [scrollX, setScroll] = useState<number>(window.scrollX);
-  
+
+  const handleResize = () => {
+    setWindowWidth(window.innerWidth);
+  };
+
   useEffect(() => {
-    const handleResize = () => {
-      setWindowWidth(window.innerWidth);
-    };
     console.log(windowWidth);
 
-    const handleScroll = () => {
-      setScroll(window.scrollX)
-    }
-
-    console.log(scrollX);
-    
     window.addEventListener("resize", handleResize);
-
-    window.addEventListener("scroll", handleScroll);
 
     return () => {
       window.removeEventListener("resize", handleResize);
-      window.removeEventListener("scroll", handleScroll);
     };
-  }, [windowWidth, scrollX]);
+  }, [windowWidth]);
+
+  //Dragging
+
+  const [startX, setStartX] = useState(0);
+  const [isDragging, setIsDragging] = useState(false);
+
+  const handleDragStart = (e: MouseEvent) => {
+    e.preventDefault();
+    if (scrollRef.current) {
+      setIsDragging(true);
+      setStartX(e.pageX);
+    }
+  };
+
+  const handleDragMove = (e: MouseEvent) => {
+    if (!isDragging || !scrollRef.current) {
+      return;
+    }
+    e.preventDefault();
+
+    const distance = e.pageX - startX;
+
+    if (distance < -100 && currentSlide < 2) {
+      setIsDragging(false);
+      setCurrentSlide((prev) => prev + 1);
+      scrollRef.current.scrollBy({ left: 1000, behavior: "smooth" });
+    } else if (distance > 100 && currentSlide > 0) {
+      scrollRef.current.scrollBy({ left: -1000, behavior: "smooth" });
+      setCurrentSlide((prev) => prev - 1);
+      setIsDragging(false);
+    }
+  };
+
+  const handleDragEnd = () => {
+    if (scrollRef.current) setIsDragging(false);
+  };
 
   return (
     <>
       <div className="flex items-center relative">
         <div
           ref={scrollRef}
-          className={`relative flex gap-6 snap-x w-full snap-center snap-mandatory overflow-x-auto scroll-hide h-calc justify-items-center items-center`}>
+          onMouseDown={handleDragStart}
+          onMouseMove={handleDragMove}
+          onMouseUp={handleDragEnd}
+          className={`relative flex gap-6 w-full snap-x snap-center snap-mandatory scroll-hide overflow-x-auto hi h-calc justify-items-center items-center`}>
           <div
             className="shrink-0 snap-center relative"
             style={{
               paddingLeft: `${windowWidth / 2 - 506}px`,
             }}>
             <Link
-              to="introduction"
-              className="bg-custom bg-cover w-250 h-150 flex items-center justify-center">
-              Introduction
+              to="Introduction"
+              draggable={false}
+              className="bg-custom bg-cover w-250 h-150 flex items-center justify-center select-none">
+              Test
             </Link>
           </div>
           <div className="shrink-0 snap-center">
             <a className="bg-custom bg-cover w-250 h-150 flex items-center justify-center">
-              Introduction
+              Test
             </a>
           </div>
-          <div className="shrink-0 snap-center"
-          style={{
-            paddingRight: `${windowWidth / 2 - 506}px`,
-          }}>
-            <a
-              className="bg-custom bg-cover w-250 h-150 flex items-center justify-center">
-              Introduction
+          <div
+            className="shrink-0 snap-center"
+            style={{
+              paddingRight: `${windowWidth / 2 - 506}px`,
+            }}>
+            <a className="bg-custom bg-cover w-250 h-150 flex items-center justify-center">
+              Test
             </a>
           </div>
         </div>
