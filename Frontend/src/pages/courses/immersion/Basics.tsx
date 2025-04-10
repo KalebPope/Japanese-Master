@@ -90,7 +90,7 @@ export default function Basics() {
               paddingLeft: `${windowWidth / 2 - 506}px`,
             }}>
             <Link
-              to="Introduction"
+              to="ZeroToHero"
               draggable={false}
               className="bg-custom bg-cover w-250 h-150 flex items-center justify-center select-none">
               Test

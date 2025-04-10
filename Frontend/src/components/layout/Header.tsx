@@ -8,7 +8,7 @@ export default function Header() {
       <h1 className="font-nuku1 text-red-500 text-2xl">Japanese Master</h1>
       <div className="flex justify-center gap-4">
         <Link to="/">Home</Link>
-        <Link to="/immersion">Courses</Link>
+        <Link to="/basics">Courses</Link>
         <Link to="JLPT">JLPT</Link>
         <Link to="Kanji">Kanji</Link>
         <Link to="Grammar">Grammar</Link>
