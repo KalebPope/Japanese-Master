@@ -2,46 +2,64 @@ import { Link } from "react-router-dom";
 
 export default function zeroToHero() {
   return (
-    <div className="mx-auto w-1/2 font-nuku1">
-      <div className="flex flex-col items-center pt-10">
-        <h1 className="font-bold text-5xl whitespace-nowrap">
-          Zero to Hero
-        </h1>
-      </div>
-        <div className=" mt-10">
-      <div className="grid grid-cols-3 bg-red-500 w-full p-1">
-        <h1 className="text-white text-4xl ">1 - Introduction</h1>
-        <h1 className="flex justify-self-center items-end text-white text-3xl font-bold">はじめに</h1>
-      </div>
-      </div>
-        <div className="flex w-full pt-10 justify-items-start">
-        <Link to="introduction"
-         className="bg-custom bg-cover rounded-3xl w-130 h-80 flex items-center justify-center">
-              Test
-            </Link>
+    <>
+      <div className="bg-custom bg-right h-100 mb-10">
+        <div className="flex items-center justify-center backdrop-blur-xs h-100">
+          <div className="flex flex-col items-center">
+            <h1 className="font-nuku1 text-4xl font-bold pb-5">Zero To Hero</h1>
+            <p className=" text-xl max-w-150 mx-auto pb-5 font-bold text-center">
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Ab sint
+              aspernatur ducimus quia! Consequuntur natus possimus rem magni,
+              hic voluptatem unde laudantium, dolores odio tenetur aliquid
+              reiciendis minima assumenda illum!
+            </p>
+          </div>
         </div>
-        <div className="pt-5">
-          <h2>1.1 - What is the Japanese Language?</h2>
-          <h2>1.2 - Hiragana</h2>
-          <h2>1.3 - Katakana</h2>
-          <h2>1.4 - Greetings</h2>
-        </div>
-        <div className=" mt-10">
-      <div className="grid grid-cols-[2fr_1fr_1fr] bg-red-500 w-full p-1">
-        <h1 className="text-white text-3xl ">2 - The Basics: Hiragana & Katakana</h1>
-        <h1 className="col-start-3 flex justify-self-end items-center text-white text-3xl font-bold ">ひらがなとかカタカナ</h1>
       </div>
+      <div className="max-w-7xl mx-auto">
+        <div className="grid grid-cols-2">
+          <div className="flex items-center">
+            <span className="material-symbols-outlined">filter_list</span>
+            <label>Filter</label>
+          </div>
+          <div className="flex items-center justify-self-end pr-5 mb-5">
+            <span className="material-symbols-outlined">sort</span>
+            <label>Sort by:</label>
+            <select>
+              <option>Test 1</option>
+              <option>Test 2</option>
+              <option>Test 3</option>
+            </select>
+          </div>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+          <Link
+            to="introduction"
+            className="bg-custom bg-cover w-70 h-50 rounded-2xl flex items-center justify-center select-none">
+            Test
+          </Link>
+          <Link
+            to="ZeroToHero"
+            className="bg-custom bg-cover w-70 h-50 rounded-2xl flex items-center justify-center select-none">
+            Test
+          </Link>
+          <Link
+            to="ZeroToHero"
+            className="bg-custom bg-cover w-70 h-50 rounded-2xl flex items-center justify-center select-none">
+            Test
+          </Link>
+          <Link
+            to="ZeroToHero"
+            className="bg-custom bg-cover w-70 h-50 rounded-2xl flex items-center justify-center select-none">
+            Test
+          </Link>
+          <Link
+            to="ZeroToHero"
+            className="bg-custom bg-cover w-70 h-50 rounded-2xl flex items-center justify-center select-none">
+            Test
+          </Link>
+        </div>
       </div>
-        <div className="mt-10 mb-5">
-          <h1 className="bg-red-500 w-full h-1"></h1>
-          <h1 className="flex items-center pl-2 bg-red-500 w-38 h-8 rounded-br-2xl text-white">第１課 - Lesson 1</h1>
-        </div>
-        <h1 className="text-2xl">ひらがな - Hiragana</h1>
-        <div className="flex w-full pt-30 justify-end">
-        <a className="bg-custom bg-cover rounded-3xl w-130 h-80 flex items-center justify-center">
-              Test
-            </a>
-        </div>
-        </div>
+    </>
   );
 }
