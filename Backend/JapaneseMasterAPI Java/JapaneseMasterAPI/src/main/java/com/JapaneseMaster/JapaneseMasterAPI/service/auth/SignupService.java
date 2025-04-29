@@ -1,39 +1,48 @@
 package com.JapaneseMaster.JapaneseMasterAPI.service.auth;
 
-import com.JapaneseMaster.JapaneseMasterAPI.dto.SignupReq;
-import com.JapaneseMaster.JapaneseMasterAPI.model.Users;
-import com.JapaneseMaster.JapaneseMasterAPI.repository.UserRepo;
+import com.JapaneseMaster.JapaneseMasterAPI.dto.auth.SignupRequest;
+import com.JapaneseMaster.JapaneseMasterAPI.dto.auth.SignupResponse;
+import com.JapaneseMaster.JapaneseMasterAPI.entity.Users;
+import com.JapaneseMaster.JapaneseMasterAPI.repository.UserRepository;
 import jakarta.validation.ValidationException;
+import lombok.Builder;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
 
+@Service
+@RequiredArgsConstructor
 public class SignupService {
 
-    private final UserRepo userRepo;
+    private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final JwtService jwtService;
+    private final SignupResponse signupResponse;
 
-    public SignupService(UserRepo userRepo, PasswordEncoder passwordEncoder) {
-        this.userRepo = userRepo;
-        this.passwordEncoder = passwordEncoder;
-    }
+    public SignupResponse signupUser(SignupRequest request) {
 
-    public Users signupUser (SignupReq signupReq) {
-
-        if (userRepo.existsByUsername(signupReq.getUsername())) {
-            System.out.println("Hello");
+        if (userRepository.existsByUsername(request.getUsername())) {
             throw new ValidationException("Username is already taken");
         }
 
-        if (userRepo.existsByEmail(signupReq.getEmail())) {
+        if (userRepository.existsByEmail(request.getEmail())) {
             throw new ValidationException("Email is already registered");
         }
 
-        Users user = new Users();
-        user.setUsername(signupReq.getUsername());
-        user.setEmail(signupReq.getEmail());
+        String hashedPassword = passwordEncoder.encode((request.getPassword()));
 
-        String hashedPassword = passwordEncoder.encode((signupReq.getPassword()));
+        Users user = Users.builder()
+                .username(request.getUsername())
+                .email(request.getEmail())
+                .password(hashedPassword)
+                .build();
 
-        user.setPassword(hashedPassword);
-        return userRepo.save(user);
+        userRepository.save(user);
+
+        String jwtToken = jwtService.generateToken(user);
+
+        return SignupResponse.builder()
+                .token(jwtToken)
+                .build();
     }
 }

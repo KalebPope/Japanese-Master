@@ -1,44 +1,47 @@
 package com.JapaneseMaster.JapaneseMasterAPI.service.auth;
 
-import com.JapaneseMaster.JapaneseMasterAPI.dto.LoginReq;
-import com.JapaneseMaster.JapaneseMasterAPI.model.Users;
-import com.JapaneseMaster.JapaneseMasterAPI.repository.UserRepo;
+import com.JapaneseMaster.JapaneseMasterAPI.dto.auth.LoginRequest;
+import com.JapaneseMaster.JapaneseMasterAPI.entity.Users;
+import com.JapaneseMaster.JapaneseMasterAPI.repository.UserRepository;
 import jakarta.validation.ValidationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
+@Service
 public class LoginService {
 
-    private final UserRepo userRepo;
+    private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public LoginService(UserRepo userRepo, PasswordEncoder passwordEncoder) {
-        this.userRepo = userRepo;
+    public LoginService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+        this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
-    public Users loginUser (LoginReq loginReq) {
+    public Users loginUser(LoginRequest loginRequest) {
 
-        final String username = loginReq.getUsername();
-        final String email = loginReq.getEmail();
+        final String username = loginRequest.getUsername();
+        final String email = loginRequest.getEmail();
 
-        Users user = null;
-
-        if (username == null && email == null ) {
+        if (username == null && email == null) {
             throw new ValidationException("Username or Email has not been provided.");
         }
 
-        if (username != null) {
-            user = userRepo.findByUsername(username);
-        } else {
-            user = userRepo.findByEmail(email);
-        }
+        Optional<Users> user = (username != null)
+                ? userRepository.findByUsername(username)
+                : userRepository.findByEmail(email);
 
-        boolean verifyPassword = passwordEncoder.matches(loginReq.getPassword(), user.getPassword());
+        Users userFound = user.orElseThrow(() -> new ValidationException("User not found"));
+
+        boolean verifyPassword = passwordEncoder.matches(loginRequest.getPassword(), userFound.getPassword());
+
         if (!verifyPassword) {
             throw new ValidationException("Password is incorrect");
         }
 
-        return user;
+        return userFound;
 
     }
 

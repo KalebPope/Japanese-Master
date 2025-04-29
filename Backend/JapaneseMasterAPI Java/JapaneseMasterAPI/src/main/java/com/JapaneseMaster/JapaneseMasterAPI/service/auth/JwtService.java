@@ -2,16 +2,18 @@ package com.JapaneseMaster.JapaneseMasterAPI.service.auth;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
 import java.util.Date;
 import java.util.function.Function;
 
+//This service generates, validates and extracts tokens
 
+@Service
 public class JwtService {
 
     private static final String SECRET_KEY = "qJDJQU7Swh+9LM5HhSkF9Tp7Y+4pVtMQ7HkC+3iOWEk=";
@@ -33,7 +35,6 @@ public class JwtService {
     private boolean isTokenExpired(String token) {
         return extractExpiration(token).before(new Date());
     }
-
 
     //Generates the token with a subject field, iss and exp date. It then signs the token and compacts it.
 
@@ -61,7 +62,7 @@ public class JwtService {
     //The Function<Claims, T> is the type of the function and its return type
     // e.g. getSubject() returns a string (subject = "John") so Function<Claims, String>
 
-    public  <T> T extractClaims(String token, Function<Claims, T> claimsResolver) {
+    public <T> T extractClaims(String token, Function<Claims, T> claimsResolver) {
 
         final Claims claims = extractAllClaims(token);
 

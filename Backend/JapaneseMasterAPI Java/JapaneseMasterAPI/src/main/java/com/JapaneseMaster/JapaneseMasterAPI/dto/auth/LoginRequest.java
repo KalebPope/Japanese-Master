@@ -1,4 +1,4 @@
-package com.JapaneseMaster.JapaneseMasterAPI.dto;
+package com.JapaneseMaster.JapaneseMasterAPI.dto.auth;
 
 
 import jakarta.validation.constraints.Email;
@@ -12,7 +12,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class LoginReq {
+public class LoginRequest {
 
     private String username;
 
