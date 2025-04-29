@@ -14,25 +14,25 @@ import java.util.Map;
 @ControllerAdvice
 public class GlobalExeptionHandler {
 
-        @ExceptionHandler(MethodArgumentNotValidException.class)
-        public ResponseEntity<Map<String, String>> handleMethodArgValidationException(MethodArgumentNotValidException ex) {
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<Map<String, String>> handleMethodArgValidationException(MethodArgumentNotValidException ex) {
 
-            Map<String, String> errors = new HashMap<>();
+        Map<String, String> errors = new HashMap<>();
 
-            ex.getBindingResult().getAllErrors().forEach(error -> {
-                String name = ((FieldError) error).getField();
-                String message = error.getDefaultMessage();
-                errors.put(name, message);
-            });
-            return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
-        }
+        ex.getBindingResult().getAllErrors().forEach(error -> {
+            String name = ((FieldError) error).getField();
+            String message = error.getDefaultMessage();
+            errors.put(name, message);
+        });
+        return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+    }
 
-       @ExceptionHandler(ValidationException.class)
-       public ResponseEntity<Map<String,String>> handleValidationException(ValidationException ex) {
+    @ExceptionHandler(ValidationException.class)
+    public ResponseEntity<Map<String, String>> handleValidationException(ValidationException ex) {
 
-            Map<String, String> errors = new HashMap<>();
+        Map<String, String> errors = new HashMap<>();
 
-            errors.put("error", ex.getMessage());
-            return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
-        }
+        errors.put("error", ex.getMessage());
+        return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+    }
 }

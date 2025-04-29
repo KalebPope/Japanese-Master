@@ -1,4 +1,4 @@
-package com.JapaneseMaster.JapaneseMasterAPI.dto;
+package com.JapaneseMaster.JapaneseMasterAPI.dto.auth;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -13,7 +13,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class SignupReq {
+public class SignupRequest {
 
     @NotBlank(message = "Please provide a username")
     private String username;

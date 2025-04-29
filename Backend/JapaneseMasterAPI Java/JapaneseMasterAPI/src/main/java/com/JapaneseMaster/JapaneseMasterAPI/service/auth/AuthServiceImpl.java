@@ -1,25 +1,24 @@
 package com.JapaneseMaster.JapaneseMasterAPI.service.auth;
-import com.JapaneseMaster.JapaneseMasterAPI.dto.LoginReq;
-import com.JapaneseMaster.JapaneseMasterAPI.dto.SignupReq;
-import com.JapaneseMaster.JapaneseMasterAPI.model.Users;
+
+import com.JapaneseMaster.JapaneseMasterAPI.dto.auth.LoginRequest;
+import com.JapaneseMaster.JapaneseMasterAPI.dto.auth.SignupRequest;
+import com.JapaneseMaster.JapaneseMasterAPI.dto.auth.SignupResponse;
+import com.JapaneseMaster.JapaneseMasterAPI.entity.Users;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
 
     private final SignupService signupService;
     private final LoginService loginService;
 
-    public AuthServiceImpl(SignupService signupService, LoginService loginService) {
-        this.signupService = signupService;
-        this.loginService = loginService;
+    public SignupResponse signup(SignupRequest request) {
+        return signupService.signupUser(request);
     }
 
-    public Users signup (SignupReq signupReq) {
-        return signupService.signupUser(signupReq);
-    }
-
-    public Users login (LoginReq loginReq) {
-        return loginService.loginUser(loginReq);
+    public Users login(LoginRequest loginRequest) {
+        return loginService.loginUser(loginRequest);
     }
 }
