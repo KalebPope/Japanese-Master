@@ -18,7 +18,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class ApplicationConfig {
 
     private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
 
     // Overriding the loadUserByUsername() method that gets the username and finds it.
     // As it is an interface we implement the method.
@@ -40,6 +39,7 @@ public class ApplicationConfig {
         return authProvider;
     }
 
+    @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
     }

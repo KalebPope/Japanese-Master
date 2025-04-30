@@ -1,12 +1,12 @@
 package com.JapaneseMaster.JapaneseMasterAPI.service.auth;
 
-import com.JapaneseMaster.JapaneseMasterAPI.dto.auth.LoginRequest;
-import com.JapaneseMaster.JapaneseMasterAPI.dto.auth.SignupRequest;
-import com.JapaneseMaster.JapaneseMasterAPI.dto.auth.SignupResponse;
-import com.JapaneseMaster.JapaneseMasterAPI.entity.Users;
+import com.JapaneseMaster.JapaneseMasterAPI.dto.auth.*;
 
 public interface AuthService {
+
     public SignupResponse signup(SignupRequest signupRequest);
 
-    public Users login(LoginRequest loginRequest);
+    public LoginResponse login(LoginRequest loginRequest);
+
+    public TokenResponse validate(TokenRequest request);
 }

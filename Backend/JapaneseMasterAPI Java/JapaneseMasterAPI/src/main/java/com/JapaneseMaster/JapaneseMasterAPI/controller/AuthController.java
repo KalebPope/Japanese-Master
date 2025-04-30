@@ -1,13 +1,11 @@
 package com.JapaneseMaster.JapaneseMasterAPI.controller;
 
-import com.JapaneseMaster.JapaneseMasterAPI.dto.auth.LoginRequest;
-import com.JapaneseMaster.JapaneseMasterAPI.dto.auth.SignupRequest;
-import com.JapaneseMaster.JapaneseMasterAPI.dto.auth.SignupResponse;
-import com.JapaneseMaster.JapaneseMasterAPI.entity.Users;
+import com.JapaneseMaster.JapaneseMasterAPI.dto.auth.*;
+import com.JapaneseMaster.JapaneseMasterAPI.service.auth.AuthService;
 import com.JapaneseMaster.JapaneseMasterAPI.service.auth.AuthServiceImpl;
+import com.JapaneseMaster.JapaneseMasterAPI.service.auth.JwtServiceImpl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class AuthController {
 
-    private final AuthServiceImpl authService;
+    private final AuthService authService;
 
     @PostMapping("/signup")
     public ResponseEntity<SignupResponse> signup(@Valid @RequestBody SignupRequest request) {
@@ -24,8 +22,12 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Users> login(@Valid @RequestBody LoginRequest loginRequest) {
-        Users user = authService.login(loginRequest);
-        return new ResponseEntity<>(user, HttpStatus.OK);
+    public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest request) {
+        return ResponseEntity.ok(authService.login(request));
+    }
+
+    @PostMapping("/validate")
+    public ResponseEntity<TokenResponse> validate(@Valid @RequestBody TokenRequest request) {
+        return ResponseEntity.ok(authService.validate(request));
     }
 }
