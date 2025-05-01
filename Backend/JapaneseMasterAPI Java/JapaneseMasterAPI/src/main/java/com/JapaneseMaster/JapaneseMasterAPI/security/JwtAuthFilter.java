@@ -1,6 +1,10 @@
 package com.JapaneseMaster.JapaneseMasterAPI.security;
 
-import com.JapaneseMaster.JapaneseMasterAPI.service.auth.JwtServiceImpl;
+import com.JapaneseMaster.JapaneseMasterAPI.entity.Token;
+import com.JapaneseMaster.JapaneseMasterAPI.enums.TokenStatus;
+import com.JapaneseMaster.JapaneseMasterAPI.repository.TokenRepository;
+import com.JapaneseMaster.JapaneseMasterAPI.service.auth.JwtService;
+import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -23,8 +27,9 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class JwtAuthFilter extends OncePerRequestFilter {
 
-    private final JwtServiceImpl jwtServiceImpl;
+    private final JwtService jwtService;
     private final UserDetailsService userDetailsService;
+    private final TokenRepository tokenRepository;
 
     @Override
     protected void doFilterInternal(
@@ -45,7 +50,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         }
 
         jwt = authHeader.substring(7);
-        username = jwtServiceImpl.extractUsername(jwt);
+        username = jwtService.extractUsername(jwt);
 
         // If there is a valid user, and they aren't authenticated yet
 
@@ -55,7 +60,13 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
             //Checks the jwt is valid
 
-            if (jwtServiceImpl.isTokenValid(jwt, userDetails)) {
+            Token isDbTokenValid = tokenRepository.findByToken(jwt).orElseThrow(() -> new JwtException("Token could not be found"));
+
+            if (isDbTokenValid.getTokenStatus() == TokenStatus.REVOKED || isDbTokenValid.getTokenStatus() == TokenStatus.EXPIRED) {
+                throw new JwtException("Token is expired or revoked");
+            }
+
+            if (jwtService.isTokenValid(jwt, userDetails)) {
 
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken
                         (userDetails, null, userDetails.getAuthorities());
@@ -66,8 +77,8 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
                 SecurityContextHolder.getContext().setAuthentication(authToken);
             }
-
-            filterChain.doFilter(request, response);
         }
+
+        filterChain.doFilter(request, response);
     }
 }

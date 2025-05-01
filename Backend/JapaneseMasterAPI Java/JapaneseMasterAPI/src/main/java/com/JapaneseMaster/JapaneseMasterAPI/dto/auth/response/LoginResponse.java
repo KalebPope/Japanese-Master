@@ -1,4 +1,4 @@
-package com.JapaneseMaster.JapaneseMasterAPI.dto.auth;
+package com.JapaneseMaster.JapaneseMasterAPI.dto.auth.response;
 
 import lombok.*;
 
@@ -7,6 +7,6 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class SignupResponse {
+public class LoginResponse {
     private String token;
 }

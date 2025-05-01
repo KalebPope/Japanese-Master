@@ -1,5 +1,9 @@
 package com.JapaneseMaster.JapaneseMasterAPI.service.auth;
 
+import com.JapaneseMaster.JapaneseMasterAPI.entity.Token;
+import com.JapaneseMaster.JapaneseMasterAPI.entity.Users;
+import com.JapaneseMaster.JapaneseMasterAPI.enums.TokenStatus;
+import com.JapaneseMaster.JapaneseMasterAPI.repository.TokenRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
@@ -9,7 +13,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Date;
+import java.util.List;
 import java.util.function.Function;
 
 //This service generates, validates and extracts tokens
@@ -18,6 +25,8 @@ import java.util.function.Function;
 @RequiredArgsConstructor
 public class JwtServiceImpl implements JwtService {
 
+    private final TokenRepository tokenRepository;
+    private final ZonedDateTime zonedDateTime;
     private static final String SECRET_KEY = "qJDJQU7Swh+9LM5HhSkF9Tp7Y+4pVtMQ7HkC+3iOWEk=";
 
     //This method converts your secret JWT key to bytes so the HMAC can create a valid key to use for verification
@@ -34,10 +43,14 @@ public class JwtServiceImpl implements JwtService {
     //Generates the token with a subject field, iss and exp date. It then signs the token and compacts it.
 
     public String generateToken(UserDetails userDetails) {
+
+        Date issuedAt = Date.from(zonedDateTime.toInstant());
+        Date expiredAt = Date.from(zonedDateTime.plusMinutes(30).toInstant());
+
         return Jwts.builder()
                 .subject(userDetails.getUsername())
-                .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + 30 * 60 * 1000))
+                .issuedAt(issuedAt)
+                .expiration(expiredAt)
                 .signWith(getSignInKey())
                 .compact();
     }
@@ -71,6 +84,14 @@ public class JwtServiceImpl implements JwtService {
         return extractClaims(token, Claims::getSubject);
     }
 
+    public void revokeAllTokens(Users user) {
+        List<Token> validTokens = tokenRepository.findByUserIdAndTokenStatus(user.getId(), TokenStatus.ACTIVE);
+        if (validTokens.isEmpty()) {
+            return;
+        }
+        validTokens.forEach(token -> token.setTokenStatus(TokenStatus.REVOKED));
+    }
+
     public boolean isTokenValid(String token, UserDetails userDetails) {
         final String username = extractUsername(token);
         return username.equals(userDetails.getUsername()) && !isTokenExpired(token);
@@ -81,5 +102,4 @@ public class JwtServiceImpl implements JwtService {
     public boolean isTokenExpired(String token) {
         return extractExpiration(token).before(new Date());
     }
-
 }

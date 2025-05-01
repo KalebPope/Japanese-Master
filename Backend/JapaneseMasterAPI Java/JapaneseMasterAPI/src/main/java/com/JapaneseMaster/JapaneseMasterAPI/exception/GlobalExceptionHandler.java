@@ -1,5 +1,7 @@
 package com.JapaneseMaster.JapaneseMasterAPI.exception;
 
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
 import jakarta.validation.ValidationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,7 +15,19 @@ import java.util.HashMap;
 import java.util.Map;
 
 @ControllerAdvice
-public class GlobalExeptionHandler {
+public class GlobalExceptionHandler {
+
+    private ResponseEntity<Map<String, String>> handleException(String errorMessage, HttpStatus status) {
+        Map<String, String> errors = new HashMap<>();
+        errors.put("error", errorMessage);
+        return new ResponseEntity<>(errors, status);
+    }
+
+    private ResponseEntity<Map<String, String>> handleException(Exception ex, HttpStatus status) {
+        Map<String, String> errors = new HashMap<>();
+        errors.put("error", ex.getMessage());
+        return new ResponseEntity<>(errors, status);
+    }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, String>> handleMethodArgValidationException(MethodArgumentNotValidException ex) {
@@ -25,25 +39,32 @@ public class GlobalExeptionHandler {
             String message = error.getDefaultMessage();
             errors.put(name, message);
         });
+
         return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(ValidationException.class)
     public ResponseEntity<Map<String, String>> handleValidationException(ValidationException ex) {
-
-        Map<String, String> errors = new HashMap<>();
-
-        errors.put("error", ex.getMessage());
-        return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+        return handleException(ex, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity<Map<String, String>> handleBadCredentialsException(BadCredentialsException ex) {
+        return handleException("Password is incorrect", HttpStatus.UNAUTHORIZED);
+    }
 
-        Map<String, String> errors = new HashMap<>();
+    @ExceptionHandler(JwtException.class)
+    public ResponseEntity<Map<String, String>> handleJwtException(JwtException ex) {
+        return handleException(ex, HttpStatus.UNAUTHORIZED);
+    }
 
-        errors.put("error", "Password is incorrect");
+    @ExceptionHandler(ExpiredJwtException.class)
+    public ResponseEntity<Map<String, String>> handleExpiredJwtException(ExpiredJwtException ex) {
+        return handleException(ex, HttpStatus.UNAUTHORIZED);
+    }
 
-        return new ResponseEntity<>(errors, HttpStatus.UNAUTHORIZED);
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<Map<String, String>> handleAllOtherExceptions(Exception ex) {
+        return handleException(ex, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

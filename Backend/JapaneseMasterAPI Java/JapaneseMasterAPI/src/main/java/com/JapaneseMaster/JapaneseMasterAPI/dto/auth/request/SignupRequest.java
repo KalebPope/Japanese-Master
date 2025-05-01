@@ -1,4 +1,4 @@
-package com.JapaneseMaster.JapaneseMasterAPI.dto.auth;
+package com.JapaneseMaster.JapaneseMasterAPI.dto.auth.request;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
