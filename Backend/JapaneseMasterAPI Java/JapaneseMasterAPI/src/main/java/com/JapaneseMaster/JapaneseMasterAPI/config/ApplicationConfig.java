@@ -53,7 +53,7 @@ public class ApplicationConfig {
     }
 
     @Bean
-    public ZonedDateTime zonedDateTime() {
-        return ZonedDateTime.now(ZoneId.of("Australia/Melbourne"));
+    public ZoneId dateTimeRegion() {
+        return ZoneId.of("Australia/Melbourne");
     }
 }

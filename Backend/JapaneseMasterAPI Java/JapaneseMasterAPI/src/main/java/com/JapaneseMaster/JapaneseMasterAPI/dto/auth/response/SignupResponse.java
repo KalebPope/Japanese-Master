@@ -9,4 +9,5 @@ import lombok.*;
 @Builder
 public class SignupResponse {
     private String token;
+    private String refreshToken;
 }

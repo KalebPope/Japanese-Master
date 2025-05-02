@@ -10,11 +10,12 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.HashMap;
 import java.util.Map;
 
-@ControllerAdvice
+@RestControllerAdvice
 public class GlobalExceptionHandler {
 
     private ResponseEntity<Map<String, String>> handleException(String errorMessage, HttpStatus status) {
@@ -55,7 +56,10 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(JwtException.class)
     public ResponseEntity<Map<String, String>> handleJwtException(JwtException ex) {
-        return handleException(ex, HttpStatus.UNAUTHORIZED);
+        System.out.println("penispenispenis");
+        Map<String, String> response = new HashMap<>();
+        response.put("error", "Invalid or expired token");
+        return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
     }
 
     @ExceptionHandler(ExpiredJwtException.class)

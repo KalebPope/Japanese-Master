@@ -1,5 +1,6 @@
 package com.JapaneseMaster.JapaneseMasterAPI.enums;
 
 public enum TokenType {
-    BEARER
+    BEARER,
+    REFRESH
 }

@@ -4,6 +4,7 @@ import com.JapaneseMaster.JapaneseMasterAPI.entity.Token;
 import com.JapaneseMaster.JapaneseMasterAPI.enums.TokenStatus;
 import com.JapaneseMaster.JapaneseMasterAPI.repository.TokenRepository;
 import com.JapaneseMaster.JapaneseMasterAPI.service.auth.JwtService;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -11,6 +12,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -49,8 +51,28 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             return;
         }
 
+
+
         jwt = authHeader.substring(7);
-        username = jwtService.extractUsername(jwt);
+
+        Token isDbTokenValid = tokenRepository.findByToken(jwt).orElse(null);
+
+        if(isDbTokenValid == null) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
+        try {
+            username = jwtService.extractUsername(jwt);
+        } catch (ExpiredJwtException e) {
+            isDbTokenValid.setTokenStatus(TokenStatus.EXPIRED);
+            tokenRepository.save(isDbTokenValid);
+            response.setStatus(HttpStatus.UNAUTHORIZED.value());
+            response.setContentType("application/json");
+            response.getWriter().write("{\"error\":\"Expired token\"}");
+            return;
+        }
+
 
         // If there is a valid user, and they aren't authenticated yet
 
@@ -60,13 +82,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
             //Checks the jwt is valid
 
-            Token isDbTokenValid = tokenRepository.findByToken(jwt).orElseThrow(() -> new JwtException("Token could not be found"));
-
-            if (isDbTokenValid.getTokenStatus() == TokenStatus.REVOKED || isDbTokenValid.getTokenStatus() == TokenStatus.EXPIRED) {
-                throw new JwtException("Token is expired or revoked");
-            }
-
-            if (jwtService.isTokenValid(jwt, userDetails)) {
+            if (jwtService.isTokenValid(jwt, userDetails) && isDbTokenValid.getTokenStatus() == TokenStatus.ACTIVE ) {
 
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken
                         (userDetails, null, userDetails.getAuthorities());

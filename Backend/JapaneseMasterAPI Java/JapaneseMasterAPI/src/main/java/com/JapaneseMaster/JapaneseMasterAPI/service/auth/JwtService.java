@@ -10,6 +10,8 @@ public interface JwtService {
 
     String generateToken(UserDetails userDetails);
 
+    String generateRefreshToken(UserDetails userDetails);
+
     Claims extractAllClaims(String token);
 
     <T> T extractClaims(String token, Function<Claims, T> claimsResolver);

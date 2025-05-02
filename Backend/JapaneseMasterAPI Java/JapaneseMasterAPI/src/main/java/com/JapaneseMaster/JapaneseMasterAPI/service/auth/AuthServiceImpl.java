@@ -1,28 +1,29 @@
 package com.JapaneseMaster.JapaneseMasterAPI.service.auth;
 
 import com.JapaneseMaster.JapaneseMasterAPI.dto.auth.request.LoginRequest;
-import com.JapaneseMaster.JapaneseMasterAPI.dto.auth.request.LogoutRequest;
 import com.JapaneseMaster.JapaneseMasterAPI.dto.auth.request.SignupRequest;
-import com.JapaneseMaster.JapaneseMasterAPI.dto.auth.request.TokenRequest;
 import com.JapaneseMaster.JapaneseMasterAPI.dto.auth.response.LoginResponse;
-import com.JapaneseMaster.JapaneseMasterAPI.dto.auth.response.LogoutResponse;
+import com.JapaneseMaster.JapaneseMasterAPI.dto.auth.response.RefreshResponse;
 import com.JapaneseMaster.JapaneseMasterAPI.dto.auth.response.SignupResponse;
-import com.JapaneseMaster.JapaneseMasterAPI.dto.auth.response.TokenResponse;
+import com.JapaneseMaster.JapaneseMasterAPI.dto.auth.response.ValidateResponse;
 import com.JapaneseMaster.JapaneseMasterAPI.entity.Token;
 import com.JapaneseMaster.JapaneseMasterAPI.entity.Users;
 import com.JapaneseMaster.JapaneseMasterAPI.enums.TokenStatus;
+import com.JapaneseMaster.JapaneseMasterAPI.enums.TokenType;
 import com.JapaneseMaster.JapaneseMasterAPI.repository.TokenRepository;
 import com.JapaneseMaster.JapaneseMasterAPI.repository.UserRepository;
+import com.JapaneseMaster.JapaneseMasterAPI.util.UsernameUtil;
 import io.jsonwebtoken.JwtException;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ValidationException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
 import java.util.Optional;
 
 @Service
@@ -35,6 +36,7 @@ public class AuthServiceImpl implements AuthService {
     private final TokenRepository tokenRepository;
     private final AuthenticationManager authenticationManager;
     private final PasswordEncoder passwordEncoder;
+    private final UsernameUtil usernameUtil;
 
     public SignupResponse signup(SignupRequest request) {
         if (userRepository.existsByUsername(request.getUsername())) {
@@ -56,18 +58,29 @@ public class AuthServiceImpl implements AuthService {
         userRepository.save(user);
 
         String jwtToken = jwtService.generateToken(user);
+        String refreshToken = jwtService.generateRefreshToken(user);
 
         Token token = Token.builder()
                 .token(jwtToken)
                 .tokenStatus(TokenStatus.ACTIVE)
+                .tokenType(TokenType.BEARER)
+                .user(user)
+                .build();
+
+        Token refresh = Token.builder()
+                .token(refreshToken)
+                .tokenStatus(TokenStatus.ACTIVE)
+                .tokenType(TokenType.REFRESH)
                 .user(user)
                 .build();
 
         jwtService.revokeAllTokens(user);
         tokenRepository.save(token);
+        tokenRepository.save(refresh);
 
         return SignupResponse.builder()
                 .token(jwtToken)
+                .refreshToken(refreshToken)
                 .build();
     }
 
@@ -89,74 +102,136 @@ public class AuthServiceImpl implements AuthService {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userFound.getEmail(), request.getPassword()));
 
         String jwtToken = jwtService.generateToken(userFound);
+        String refreshToken = jwtService.generateRefreshToken(userFound);
 
-        Token token = Token.builder()
+        Token dbToken = Token.builder()
                 .token(jwtToken)
                 .tokenStatus(TokenStatus.ACTIVE)
+                .tokenType(TokenType.BEARER)
                 .user(userFound)
                 .build();
 
-        var dbToken = tokenRepository.findByToken(jwtToken).orElse(null);
+        Token dbRefreshToken = Token.builder()
+                .token(jwtToken)
+                .tokenStatus(TokenStatus.ACTIVE)
+                .tokenType(TokenType.REFRESH)
+                .user(userFound)
+                .build();
 
-        if(dbToken == null) {
+
             jwtService.revokeAllTokens(userFound);
-            tokenRepository.save(token);
-        }
+            tokenRepository.save(dbToken);
+            tokenRepository.save(dbRefreshToken);
 
         return LoginResponse.builder()
                 .token(jwtToken)
+                .refreshToken(refreshToken)
                 .build();
     }
 
-    public LogoutResponse logout(LogoutRequest request) {
+    public ValidateResponse validate(HttpServletRequest request) {
 
-        System.out.println("Hello");
+        final String authHeader = request.getHeader("Authorization");
 
-        String token = request.getToken().substring(7);
-
-        Token dbToken = tokenRepository.findByToken(token).orElseThrow(() -> new JwtException("Could not find token in the database"));
-
-        if(dbToken.getTokenStatus() == TokenStatus.EXPIRED || dbToken.getTokenStatus() == TokenStatus.REVOKED) {
-            throw new JwtException("User is already logged out");
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            throw new JwtException("Authorization header missing");
         }
 
-        dbToken.setTokenStatus(TokenStatus.REVOKED);
-        tokenRepository.save(dbToken);
-
-        return LogoutResponse.builder()
-                .message("Logout was successful")
-                .build();
-
-    }
-
-    public TokenResponse validate(TokenRequest request) {
-
-        String token = request.getToken().substring(7);
-
-        String username = jwtService.extractUsername(token);
+        String jwt = authHeader.substring(7);
+        String username = jwtService.extractUsername(jwt);
 
         UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
-        boolean isExpired = jwtService.isTokenExpired(token);
+        boolean isExpired = jwtService.isTokenExpired(jwt);
 
-        boolean isValid = jwtService.isTokenValid(token, userDetails);
+        boolean isValid = jwtService.isTokenValid(jwt, userDetails);
 
-        Token dbToken = tokenRepository.findByToken(token).orElseThrow(() -> new JwtException("Could not find token in database"));
+        Token dbToken = tokenRepository.findByToken(jwt).orElseThrow(() -> new JwtException("Could not find token in database"));
 
-        if (isExpired) {
+        if (isExpired || dbToken.getTokenStatus() == TokenStatus.EXPIRED) {
             dbToken.setTokenStatus(TokenStatus.EXPIRED);
             tokenRepository.save(dbToken);
             throw new JwtException("The token is expired");
         }
 
-        if (!isValid) {
+        if (!isValid || dbToken.getTokenStatus() == TokenStatus.REVOKED) {
             dbToken.setTokenStatus(TokenStatus.REVOKED);
             tokenRepository.save(dbToken);
             throw new JwtException("The token is invalid");
         }
 
-        return TokenResponse.builder()
-                .token(request.getToken())
+        return ValidateResponse.builder()
+                .message("Validation is successful")
                 .build();
     }
+
+    public RefreshResponse refresh(HttpServletRequest request) {
+
+        final String authHeader = request.getHeader("Authorization");
+
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            throw new JwtException("Refresh token not found");
+        }
+
+        String refreshToken = authHeader.substring(7);
+        String username = jwtService.extractUsername(refreshToken);
+
+        if (username != null) {
+
+            Users user = this.userRepository.findByEmail(username).orElseThrow(()
+                    -> new UsernameNotFoundException("User not found"));
+
+            Token dbToken = tokenRepository.findByToken(refreshToken).orElseThrow(()
+                    -> new JwtException("Refresh token not found"));
+
+            if(dbToken.getTokenType() != TokenType.REFRESH) {
+                throw new JwtException("Token is not of type refresh");
+            }
+
+            boolean isExpired = jwtService.isTokenExpired(refreshToken);
+
+            boolean isValid = jwtService.isTokenValid(refreshToken, user);
+
+            if (isExpired || dbToken.getTokenStatus() == TokenStatus.EXPIRED) {
+                dbToken.setTokenStatus(TokenStatus.EXPIRED);
+                tokenRepository.save(dbToken);
+                throw new JwtException("The token is expired");
+            }
+
+            if (!isValid || dbToken.getTokenStatus() == TokenStatus.REVOKED) {
+                dbToken.setTokenStatus(TokenStatus.REVOKED);
+                tokenRepository.save(dbToken);
+                throw new JwtException("The token is invalid");
+            }
+
+            String accessToken = jwtService.generateToken(user);
+            String newRefreshToken = jwtService.generateRefreshToken(user);
+
+            Token token = Token.builder()
+                    .token(accessToken)
+                    .tokenStatus(TokenStatus.ACTIVE)
+                    .tokenType(TokenType.BEARER)
+                    .user(user)
+                    .build();
+
+            Token refresh = Token.builder()
+                    .token(newRefreshToken)
+                    .tokenStatus(TokenStatus.ACTIVE)
+                    .tokenType(TokenType.REFRESH)
+                    .user(user)
+                    .build();
+
+            jwtService.revokeAllTokens(user);
+            tokenRepository.save(token);
+            tokenRepository.save(refresh);
+
+            return RefreshResponse.builder()
+                    .accessToken(accessToken)
+                    .refreshToken(newRefreshToken)
+                    .build();
+        }
+
+        throw new JwtException("Refresh failed");
+    }
+
 }

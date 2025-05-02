@@ -1,14 +1,15 @@
 package com.JapaneseMaster.JapaneseMasterAPI.controller;
 
 import com.JapaneseMaster.JapaneseMasterAPI.dto.auth.request.LoginRequest;
-import com.JapaneseMaster.JapaneseMasterAPI.dto.auth.request.LogoutRequest;
 import com.JapaneseMaster.JapaneseMasterAPI.dto.auth.request.SignupRequest;
 import com.JapaneseMaster.JapaneseMasterAPI.dto.auth.request.TokenRequest;
 import com.JapaneseMaster.JapaneseMasterAPI.dto.auth.response.LoginResponse;
-import com.JapaneseMaster.JapaneseMasterAPI.dto.auth.response.LogoutResponse;
+import com.JapaneseMaster.JapaneseMasterAPI.dto.auth.response.RefreshResponse;
 import com.JapaneseMaster.JapaneseMasterAPI.dto.auth.response.SignupResponse;
-import com.JapaneseMaster.JapaneseMasterAPI.dto.auth.response.TokenResponse;
+import com.JapaneseMaster.JapaneseMasterAPI.dto.auth.response.ValidateResponse;
 import com.JapaneseMaster.JapaneseMasterAPI.service.auth.AuthService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -31,13 +32,13 @@ public class AuthController {
         return ResponseEntity.ok(authService.login(request));
     }
 
-    @PostMapping("/logout")
-    public ResponseEntity<LogoutResponse> logout(@Valid @RequestBody LogoutRequest request) {
-        return ResponseEntity.ok(authService.logout(request));
+    @PostMapping("/validate")
+    public ResponseEntity<ValidateResponse> validate(HttpServletRequest request) {
+        return ResponseEntity.ok(authService.validate(request));
     }
 
-    @PostMapping("/validate")
-    public ResponseEntity<TokenResponse> validate(@Valid @RequestBody TokenRequest request) {
-        return ResponseEntity.ok(authService.validate(request));
+    @PostMapping("/refresh")
+    public ResponseEntity<RefreshResponse> refresh(HttpServletRequest request) {
+        return ResponseEntity.ok(authService.refresh(request));
     }
 }

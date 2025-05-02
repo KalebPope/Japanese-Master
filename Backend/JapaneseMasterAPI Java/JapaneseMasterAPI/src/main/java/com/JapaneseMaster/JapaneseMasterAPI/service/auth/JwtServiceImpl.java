@@ -9,9 +9,9 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
-
 import javax.crypto.SecretKey;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -26,13 +26,21 @@ import java.util.function.Function;
 public class JwtServiceImpl implements JwtService {
 
     private final TokenRepository tokenRepository;
-    private final ZonedDateTime zonedDateTime;
-    private static final String SECRET_KEY = "qJDJQU7Swh+9LM5HhSkF9Tp7Y+4pVtMQ7HkC+3iOWEk=";
+    private final ZoneId zoneId;
+
+    @Value("${jwt.secret-key}")
+    private String secretKey;
+
+    @Value("${jwt.expiration}")
+    private long jwtExpirationDate;
+
+    @Value("${jwt.refresh-token.expiration}")
+    private long refreshTokenExpirationDate;
 
     //This method converts your secret JWT key to bytes so the HMAC can create a valid key to use for verification
 
     private SecretKey getSignInKey() {
-        byte[] convertKeyToBytes = Decoders.BASE64.decode(SECRET_KEY);
+        byte[] convertKeyToBytes = Decoders.BASE64.decode(secretKey);
         return Keys.hmacShaKeyFor(convertKeyToBytes);
     }
 
@@ -43,9 +51,18 @@ public class JwtServiceImpl implements JwtService {
     //Generates the token with a subject field, iss and exp date. It then signs the token and compacts it.
 
     public String generateToken(UserDetails userDetails) {
+        return buildToken(userDetails, jwtExpirationDate);
+    }
 
-        Date issuedAt = Date.from(zonedDateTime.toInstant());
-        Date expiredAt = Date.from(zonedDateTime.plusMinutes(30).toInstant());
+    public String generateRefreshToken(UserDetails userDetails) {
+        return  buildToken(userDetails, refreshTokenExpirationDate);
+    }
+
+    public String buildToken(UserDetails userDetails, Long tokenType) {
+
+        ZonedDateTime now = ZonedDateTime.now(zoneId);
+        Date issuedAt = Date.from(now.toInstant());
+        Date expiredAt = Date.from(now.plusMinutes(tokenType).toInstant());
 
         return Jwts.builder()
                 .subject(userDetails.getUsername())
