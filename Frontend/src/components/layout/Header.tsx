@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom";
 
 export default function Header() {
-  //Todo: Make a useDropdown hook and turn Darkmode into useDarkmode
 
   return (
     <div className="grid grid-cols-[1fr_2fr_1fr] py-5 px-5 text-xl dark:text-white dark:bg-black">

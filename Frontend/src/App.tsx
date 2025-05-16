@@ -1,7 +1,7 @@
 import Header from "./components/layout/Header";
 import Footer from "./components/layout/Footer";
 import RouteConfig from "./routes/RouteConfig";
-import { BrowserRouter} from "react-router-dom";
+import { BrowserRouter } from "react-router-dom";
 
 export default function App() {
     return (
@@ -9,8 +9,8 @@ export default function App() {
         <BrowserRouter>
         <Header />
         <RouteConfig />
-        <Footer />   
-        </BrowserRouter>
+        <Footer /> 
+        </BrowserRouter>  
         </>
 
     )

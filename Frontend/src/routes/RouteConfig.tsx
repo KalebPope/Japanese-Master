@@ -1,11 +1,35 @@
-import MainRoutes from "./MainRoutes";
-import MethodRoutes from "./MethodRoutes";
+import {Route, Routes } from "react-router-dom";
+import Home from "../pages/home/Home";
+import Signup from "../pages/auth/Signup";
+import Basics from "../pages/courses/immersion/Basics";
+import ZeroToHero from "../pages/courses/zeroToHero";
+import Introduction from "../pages/courses/immersion/Introduction";
+
+export const mainRoutes = [
+];
+
+export const methodRoutes = [
+];
+
 
 export default function RouteConfig(){
     return (
     <>
-        <MainRoutes />
-        <MethodRoutes />
+      <Routes>
+        
+        <Route path="/" element={<Home />} />,
+        <Route path="/signup" element={<Signup />} />
+
+
+        <Route path="/basics">
+            <Route index element={<Basics />} />
+            <Route path="ZeroToHero">
+            <Route index element={<ZeroToHero />} />
+            <Route path="introduction" element={<Introduction />} />
+            </Route>
+        </Route>
+
+      </Routes>
     </>
     )
 }
