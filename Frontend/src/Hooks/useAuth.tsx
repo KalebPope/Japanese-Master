@@ -1,5 +1,6 @@
 import axios from "axios";
 import { createContext, ReactNode, useContext } from "react"
+import { useNavigate } from "react-router-dom";
 
 type signupDTO = {
     username: string,
@@ -15,13 +16,23 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
+  const navigate = useNavigate();
+
     const signup = async (signupData:signupDTO) => {
-        const {data} = await axios.post(
+
+      try {
+       const {data} = await axios.post(
             "http://localhost:8080/api/auth/signup",
             signupData
-        )
+       )  
 
-        console.log(data)
+       console.log(data)
+       navigate("/")
+      } catch (error) {
+         if (axios.isAxiosError(error)) {
+        console.error("Signup failed:", error.response?.data)
+         }
+      }
     }
       return (
     <AuthContext.Provider value={{signup}}>

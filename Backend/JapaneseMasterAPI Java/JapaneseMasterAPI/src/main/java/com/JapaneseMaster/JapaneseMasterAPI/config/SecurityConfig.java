@@ -17,6 +17,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfigurationSource;
 
 @Configuration
 @EnableWebSecurity
@@ -27,6 +28,7 @@ public class SecurityConfig {
     private final AuthenticationProvider authProvider;
     private final LogoutService logoutService;
     private final Oauth2LoginService oauth2LoginService;
+    private final CorsConfig corsConfig;
 
     @Value("${frontend.url}")
     private String frontendUrl;
@@ -34,6 +36,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
+                .cors(cors -> cors.configurationSource(corsConfig.corsConfigurationSource()))
                 .csrf((csrf) -> csrf.disable())
                 .authorizeHttpRequests(auth ->
                         auth.requestMatchers("/api/auth/**")
