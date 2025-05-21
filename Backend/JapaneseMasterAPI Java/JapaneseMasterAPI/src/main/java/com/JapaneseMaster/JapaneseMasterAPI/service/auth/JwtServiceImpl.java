@@ -44,10 +44,6 @@ public class JwtServiceImpl implements JwtService {
         return Keys.hmacShaKeyFor(convertKeyToBytes);
     }
 
-    private Date extractExpiration(String token) {
-        return extractClaims(token, Claims::getExpiration);
-    }
-
     //Generates the token with a subject field, iss and exp date. It then signs the token and compacts it.
 
     public String generateToken(UserDetails userDetails) {
@@ -101,12 +97,17 @@ public class JwtServiceImpl implements JwtService {
         return extractClaims(token, Claims::getSubject);
     }
 
+    public Date extractExpiration(String token) {
+        return extractClaims(token, Claims::getExpiration);
+    }
+
     public void revokeAllTokens(Users user) {
         List<Token> validTokens = tokenRepository.findByUserIdAndTokenStatus(user.getId(), TokenStatus.ACTIVE);
         if (validTokens.isEmpty()) {
             return;
         }
         validTokens.forEach(token -> token.setTokenStatus(TokenStatus.REVOKED));
+        tokenRepository.saveAll(validTokens);
     }
 
     public boolean isTokenValid(String token, UserDetails userDetails) {

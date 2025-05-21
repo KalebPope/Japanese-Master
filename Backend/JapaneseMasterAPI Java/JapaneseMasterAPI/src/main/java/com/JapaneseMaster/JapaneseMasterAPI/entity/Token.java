@@ -16,9 +16,11 @@ public class Token {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer Id;
+    private Long id;
 
     private String token;
+
+    private String deviceId;
 
     @Enumerated(EnumType.STRING)
     private TokenStatus tokenStatus;
@@ -27,6 +29,6 @@ public class Token {
     private TokenType tokenType;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false)
     private Users user;
 }

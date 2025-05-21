@@ -58,7 +58,6 @@ public class Oauth2LoginService {
 
         return LoginResponse.builder()
                 .token(token)
-                .refreshToken(refreshToken)
                 .build();
     }
 }

@@ -1,5 +1,6 @@
 package com.JapaneseMaster.JapaneseMasterAPI.dto.auth.response;
 
+import com.JapaneseMaster.JapaneseMasterAPI.entity.Users;
 import lombok.*;
 
 @Getter
@@ -9,5 +10,5 @@ import lombok.*;
 @Builder
 public class SignupResponse {
     private String token;
-    private String refreshToken;
+    private UserResponse user;
 }

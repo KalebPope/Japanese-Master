@@ -4,21 +4,16 @@ import Signup from "../pages/auth/Signup";
 import Basics from "../pages/courses/immersion/Basics";
 import ZeroToHero from "../pages/courses/zeroToHero";
 import Introduction from "../pages/courses/immersion/Introduction";
-
-export const mainRoutes = [
-];
-
-export const methodRoutes = [
-];
-
+import Welcome from "../pages/home/Welcome";
 
 export default function RouteConfig(){
     return (
     <>
       <Routes>
         
-        <Route path="/" element={<Home />} />,
+        <Route path="/" element={<Welcome />} />,
         <Route path="/signup" element={<Signup />} />
+        <Route path="/home" element={<Home />} />
 
 
         <Route path="/basics">

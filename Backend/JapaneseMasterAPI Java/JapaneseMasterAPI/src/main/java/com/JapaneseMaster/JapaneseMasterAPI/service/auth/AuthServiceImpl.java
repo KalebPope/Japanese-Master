@@ -2,10 +2,7 @@ package com.JapaneseMaster.JapaneseMasterAPI.service.auth;
 
 import com.JapaneseMaster.JapaneseMasterAPI.dto.auth.request.LoginRequest;
 import com.JapaneseMaster.JapaneseMasterAPI.dto.auth.request.SignupRequest;
-import com.JapaneseMaster.JapaneseMasterAPI.dto.auth.response.LoginResponse;
-import com.JapaneseMaster.JapaneseMasterAPI.dto.auth.response.RefreshResponse;
-import com.JapaneseMaster.JapaneseMasterAPI.dto.auth.response.SignupResponse;
-import com.JapaneseMaster.JapaneseMasterAPI.dto.auth.response.ValidateResponse;
+import com.JapaneseMaster.JapaneseMasterAPI.dto.auth.response.*;
 import com.JapaneseMaster.JapaneseMasterAPI.entity.Token;
 import com.JapaneseMaster.JapaneseMasterAPI.entity.Users;
 import com.JapaneseMaster.JapaneseMasterAPI.enums.TokenStatus;
@@ -14,9 +11,14 @@ import com.JapaneseMaster.JapaneseMasterAPI.repository.TokenRepository;
 import com.JapaneseMaster.JapaneseMasterAPI.repository.UserRepository;
 import com.JapaneseMaster.JapaneseMasterAPI.util.UsernameUtil;
 import io.jsonwebtoken.JwtException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.ValidationException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseCookie;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -24,6 +26,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.time.Duration;
+import java.util.Date;
 import java.util.Optional;
 
 @Service
@@ -36,9 +41,11 @@ public class AuthServiceImpl implements AuthService {
     private final TokenRepository tokenRepository;
     private final AuthenticationManager authenticationManager;
     private final PasswordEncoder passwordEncoder;
-    private final UsernameUtil usernameUtil;
 
-    public SignupResponse signup(SignupRequest request) {
+    @Value("${jwt.rotation.threshold}")
+    private long rotationThreshold;
+
+    public SignupResponse signup(SignupRequest request, HttpServletResponse response) {
         if (userRepository.existsByUsername(request.getUsername())) {
             throw new ValidationException("Username is already taken");
         }
@@ -60,13 +67,6 @@ public class AuthServiceImpl implements AuthService {
         String jwtToken = jwtService.generateToken(user);
         String refreshToken = jwtService.generateRefreshToken(user);
 
-        Token token = Token.builder()
-                .token(jwtToken)
-                .tokenStatus(TokenStatus.ACTIVE)
-                .tokenType(TokenType.BEARER)
-                .user(user)
-                .build();
-
         Token refresh = Token.builder()
                 .token(refreshToken)
                 .tokenStatus(TokenStatus.ACTIVE)
@@ -74,17 +74,29 @@ public class AuthServiceImpl implements AuthService {
                 .user(user)
                 .build();
 
-        jwtService.revokeAllTokens(user);
-        tokenRepository.save(token);
+        ResponseCookie refreshCookie = ResponseCookie.from("refreshToken", refreshToken)
+                .sameSite("Strict")
+                .httpOnly(true)
+                .secure(true)
+                .path("/")
+                .maxAge(Duration.ofDays(7))
+                .build();
+        response.addHeader(HttpHeaders.SET_COOKIE, refreshCookie.toString());
+
         tokenRepository.save(refresh);
+
+        UserResponse userResponse = UserResponse.builder()
+                .username(request.getUsername())
+                .email(request.getEmail())
+                .build();
 
         return SignupResponse.builder()
                 .token(jwtToken)
-                .refreshToken(refreshToken)
+                .user(userResponse)
                 .build();
     }
 
-    public LoginResponse login(LoginRequest request) {
+    public LoginResponse login(LoginRequest request, HttpServletResponse response) {
 
         final String username = request.getUsername();
         final String email = request.getEmail();
@@ -104,28 +116,28 @@ public class AuthServiceImpl implements AuthService {
         String jwtToken = jwtService.generateToken(userFound);
         String refreshToken = jwtService.generateRefreshToken(userFound);
 
-        Token dbToken = Token.builder()
-                .token(jwtToken)
-                .tokenStatus(TokenStatus.ACTIVE)
-                .tokenType(TokenType.BEARER)
-                .user(userFound)
-                .build();
-
         Token dbRefreshToken = Token.builder()
-                .token(jwtToken)
+                .token(refreshToken)
                 .tokenStatus(TokenStatus.ACTIVE)
                 .tokenType(TokenType.REFRESH)
                 .user(userFound)
                 .build();
 
+        ResponseCookie refreshCookie = ResponseCookie.from("refreshToken", refreshToken)
+                .sameSite("Strict")
+                .httpOnly(true)
+                .secure(true)
+                .path("/")
+                .maxAge(Duration.ofDays(7))
+                .build();
+        response.addHeader(HttpHeaders.SET_COOKIE, refreshCookie.toString());
+
 
             jwtService.revokeAllTokens(userFound);
-            tokenRepository.save(dbToken);
             tokenRepository.save(dbRefreshToken);
 
         return LoginResponse.builder()
                 .token(jwtToken)
-                .refreshToken(refreshToken)
                 .build();
     }
 
@@ -165,15 +177,27 @@ public class AuthServiceImpl implements AuthService {
                 .build();
     }
 
-    public RefreshResponse refresh(HttpServletRequest request) {
+    public RefreshResponse refresh(HttpServletRequest request, HttpServletResponse response) {
 
-        final String authHeader = request.getHeader("Authorization");
+        Cookie[] cookies = request.getCookies();
 
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            throw new JwtException("Refresh token not found");
+        if (cookies == null) {
+            throw new JwtException("Refresh token not in cookie");
         }
 
-        String refreshToken = authHeader.substring(7);
+        String refreshToken = null;
+
+        for (Cookie cookie : cookies) {
+            if ("refreshToken".equals(cookie.getName())) {
+                refreshToken = cookie.getValue();
+                break;
+            }
+        }
+
+        if (refreshToken == null) {
+            throw new JwtException("Refresh Token not found");
+        }
+
         String username = jwtService.extractUsername(refreshToken);
 
         if (username != null) {
@@ -204,30 +228,51 @@ public class AuthServiceImpl implements AuthService {
                 throw new JwtException("The token is invalid");
             }
 
+            Date expiryDate = jwtService.extractExpiration(refreshToken);
+            long timeLeft = expiryDate.getTime() - System.currentTimeMillis();
+
+            String tokenToSend = refreshToken;
+
+            if (timeLeft < rotationThreshold) {
+                String newRefreshToken = jwtService.generateRefreshToken(user);
+
+                Token newRefresh = Token.builder()
+                        .token(newRefreshToken)
+                        .tokenStatus(TokenStatus.ACTIVE)
+                        .tokenType(TokenType.REFRESH)
+                        .user(user)
+                        .build();
+
+                tokenToSend = newRefreshToken;
+
+                dbToken.setTokenStatus(TokenStatus.REVOKED);
+                tokenRepository.save(dbToken);
+                tokenRepository.save(newRefresh);
+
+            }
+
+
             String accessToken = jwtService.generateToken(user);
-            String newRefreshToken = jwtService.generateRefreshToken(user);
 
-            Token token = Token.builder()
-                    .token(accessToken)
-                    .tokenStatus(TokenStatus.ACTIVE)
-                    .tokenType(TokenType.BEARER)
-                    .user(user)
+            ResponseCookie refreshCookie = ResponseCookie.from("refreshToken", tokenToSend)
+                    .sameSite("Strict")
+                    .httpOnly(true)
+                    .secure(true)
+                    .path("/")
+                    .maxAge(Duration.ofDays(7))
                     .build();
+            response.addHeader(HttpHeaders.SET_COOKIE, refreshCookie.toString());
 
-            Token refresh = Token.builder()
-                    .token(newRefreshToken)
-                    .tokenStatus(TokenStatus.ACTIVE)
-                    .tokenType(TokenType.REFRESH)
-                    .user(user)
+            System.out.println(user.getUsername());
+
+            UserResponse userResponse = UserResponse.builder()
+                    .username(user.getProfileUsername())
+                    .email(user.getEmail())
                     .build();
-
-            jwtService.revokeAllTokens(user);
-            tokenRepository.save(token);
-            tokenRepository.save(refresh);
 
             return RefreshResponse.builder()
                     .accessToken(accessToken)
-                    .refreshToken(newRefreshToken)
+                    .user(userResponse)
                     .build();
         }
 

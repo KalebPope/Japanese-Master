@@ -12,11 +12,11 @@ import jakarta.servlet.http.HttpServletResponse;
 
 public interface AuthService {
 
-    public SignupResponse signup(SignupRequest signupRequest);
+    public SignupResponse signup(SignupRequest signupRequest, HttpServletResponse response);
 
-    public LoginResponse login(LoginRequest loginRequest);
+    public LoginResponse login(LoginRequest loginRequest, HttpServletResponse response);
 
     public ValidateResponse validate(HttpServletRequest request);
 
-    public RefreshResponse refresh(HttpServletRequest request);
+    public RefreshResponse refresh(HttpServletRequest request, HttpServletResponse response);
 }
