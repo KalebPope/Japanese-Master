@@ -11,9 +11,9 @@ export default function RouteConfig(){
     <>
       <Routes>
         
-        <Route path="/" element={<Welcome />} />,
+        <Route path="/home" element={<Welcome />} />,
         <Route path="/signup" element={<Signup />} />
-        <Route path="/home" element={<Home />} />
+        <Route path="/" element={<Home />} />
 
 
         <Route path="/basics">

@@ -1,6 +1,5 @@
 import { Link } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
-import profile from "../../assets/images/profile1.jpg";
 import { useState } from "react";
 
 export default function Header() {
@@ -23,14 +22,14 @@ export default function Header() {
         {user ? (
           <div className="relative">
             <img
-              src={profile}
+              src="/images/profile1.jpg"
               className="w-10 h-10 rounded-full"
               onClick={() => setDropdown(!dropdown)}
             />
             {dropdown && (
               <div className="fixed mt-2 pb-20 right-0 w-60 bg-white text-black shadow-md rounded-l-lg pt-10 pl-5">
                 <div className="grid grid-cols-[1fr_2fr] gap-0">
-                  <img src={profile} className="w-15 h-15 rounded-full" />
+                  <img src="/images/profile1.jpg" className="w-15 h-15 rounded-full" />
                   <div>
                     <h2 className="text-[1rem] truncate">{user.username}</h2>
                     <h2 className="text-[1rem] truncate">{user.email}</h2>

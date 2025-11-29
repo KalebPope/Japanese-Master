@@ -1,6 +1,5 @@
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useAuth } from "../../hooks/useAuth";
-import image from "../../assets/images/top-view-japanese-symbols-with-brushes.jpg";
 
 type SignupFields = {
   username: string;
@@ -19,7 +18,7 @@ export default function Signup() {
   return (
     <>
       <div className="flex justify-center items-center h-[calc(100vh-4.75rem)]">
-        <img src={image} className="w-70 h-150 rounded-l-2xl shadow-xl" />
+        <img src="/images/top-view-japanese-symbols-with-brushes.jpg" className="w-70 h-150 rounded-l-2xl shadow-xl" />
 
         <form
           onSubmit={handleSubmit(onSubmit)}

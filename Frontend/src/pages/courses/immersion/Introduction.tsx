@@ -1,4 +1,4 @@
-import image from "../../../assets/images/4612523.jpg"
+
 
 export default function Introduction() {
   return (
@@ -14,7 +14,7 @@ export default function Introduction() {
         language they're speaking? so you search "How to learn japanese" and are bombarded with search results which quickly makes
         you overwhelmed. These lessons will hopefully give you a structured guide on how to learn all the necessary skills
         needed to learn the language!</p>
-        <img className="max-w-100 max-h-100" src={image} alt="Japanese Calligraphy"/>
+        <img className="max-w-100 max-h-100" src="/images/4612523.jpg" alt="Japanese Calligraphy"/>
         <a className="text-sm font-bold text-green-400" href="http://www.freepik.com">Designed by stories / Freepik</a>
         <h1 className="pt-10 text-2xl">What is the Japanese Language?</h1>
       </div>

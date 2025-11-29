@@ -2,23 +2,44 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
+
+/*nuku 1*/
+
 @font-face {
   font-family: Nuku1;
   font-display: swap;
   src: url("./assets/fonts/nuku1.ttf") format("truetype");
 }
 
+/*intervariable*/
+
+@font-face {
+  font-family: Intervariable;
+  font-display: swap;
+  src: url("./assets/fonts/intervariable.ttf") format("truetype");
+}
+
+/*blast dragon*/
+
+@font-face {
+  font-family: BlastDragon;
+  font-display: swap;
+  src: url("./assets/fonts/Blast Dragon D.otf") format("opentype");
+}
+
 @theme {
   --font-nuku1: Nuku1, sans-serif;
+  --font-intervariable: Intervariable, sans-serif;
+  --font-blastdragon: BlastDragon, sans-serif;
   --animate-scroll: scroll-left-to-right 20s linear infinite;
 }
 
 @layer utilities {
   .bg-custom {
-    background-image: url("./assets/images/7954960.jpg");
+    background-image: url("/images/7954960.jpg");
   }
   .h-calc {
-    height: calc(100vh - 75px);
+    height: calc(100vh - 76px);
   }
 
   .scroll-hide::-webkit-scrollbar {

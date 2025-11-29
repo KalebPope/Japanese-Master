@@ -4,7 +4,7 @@ export default function Home() {
       <h1 className="font-nuku1 text-5xl pb-5 text-red-500">Japanese Master Welcome Page</h1>
       <div className="bg-red-500">
       <div className="flex flex-col max-w-200 mx-auto p-10">
-        <h1 className="text-white text-4xl font-bold pb-5">Master Japanese From Zero.</h1>
+        <h1 className=" text-white text-4xl font-bold pb-5">Master Japanese From Zero.</h1>
       <p className="text-xl max-w-150 mx-auto pb-5 text-white">
         Japanese Master is a Japanese learning website which gives advice on how
         to learn Japanese effectively and efficiently
