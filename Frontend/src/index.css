@@ -27,10 +27,22 @@
   src: url("./assets/fonts/Blast Dragon D.otf") format("opentype");
 }
 
+/*sukajan*/
+
+@font-face {
+  font-family: Sukajan;
+  font-display: swap;
+  src: url("./assets/fonts/Sukajan Brush Demo.otf") format("opentype");
+}
+
 @theme {
+  /*fonts*/
   --font-nuku1: Nuku1, sans-serif;
   --font-intervariable: Intervariable, sans-serif;
   --font-blastdragon: BlastDragon, sans-serif;
+  --font-sukajan: Sukajan, sans-serif;
+
+  /*animations*/
   --animate-scroll: scroll-left-to-right 20s linear infinite;
 }
 
