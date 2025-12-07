@@ -88,68 +88,28 @@ export default function Home() {
       {/*------------*/}
       {/*About section*/}
       {/*------------*/}
-      <div
-        ref={secondPageRef}
-        className="font-intervariable font-extrabold">
-        {/*Courses section*/}
-        <div className="max-w-7xl mx-auto grid grid-cols-2 justify-center pb-50">
-          <img src="images/image.png" className="w-200 h-100 pr-10"></img>
-          <div className="col-start-2 flex flex-col justify-center items-center">
-            <h1 className="text-8xl font-sukajan text-center pb-5">Courses</h1>
+      <div ref={secondPageRef} className="font-intervariable font-extrabold bg-[url('/images/test.png')] bg-center h-200 flex items-center pl-20">
+          {/*Courses section*/}
+          <div className=" grid grid-cols-2 items-center justify-center">
+            <div className="flex flex-col justify-center items-center">
+              <h1 className="text-8xl font-sukajan text-center pb-5 text-white">
+                Courses
+              </h1>
 
-            <p className="font-intervariable text-xl w-150">
-              Learn the basics all the way to advanced Japanese through detailed
-              lessons, witten by native Japanese people!
-            </p>
+              <p className="font-intervariable text-xl w-150 text-white">
+                Learn the basics all the way to advanced Japanese through
+                detailed lessons, witten by native Japanese people!
+              </p>
 
-            <p className="font-intervariable text-xl pt-5 w-150">
-              Each course is structured for the level it is based upon, giving
-              you detailed descriptions, fun quizzes and a sense of completion
-              with progress trackers and trophies for your profile!
-            </p>
+              <p className="font-intervariable text-xl pt-5 w-150 text-white">
+                Each course is structured for the level it is based upon, giving
+                you detailed descriptions, fun quizzes and a sense of completion
+                with progress trackers and trophies for your profile!
+              </p>
+            </div>
+            <img src="images/image.png" className="w-200 h-100 pr-10"></img>
           </div>
         </div>
-
-        {/*Games section*/}
-        <div className="max-w-7xl mx-auto grid grid-cols-2 justify-center pb-50">
-          <div className="flex flex-col justify-center items-center">
-            <h1 className="text-8xl font-sukajan text-center pb-5">Games </h1>
-
-            <p className="font-intervariable text-xl w-150">
-              Better your understanding with fun games designed to help you
-              learn Better!
-            </p>
-
-            <p className="font-intervariable text-xl pt-5 w-150">
-              Learn the Kana and have fun with a memorise type game where you
-              match the sounds with the symbol or tackle Kanji with games
-              designed to make them easier to remember!
-            </p>
-          </div>
-          <img src="images/image.png" className="w-200 h-100 pr-10"></img>
-        </div>
-
-        {/*Flashcards section*/}
-        <div className="max-w-7xl mx-auto grid grid-cols-2 justify-center pb-50">
-          <img src="images/image.png" className="w-200 h-100 pr-10"></img>
-          <div className="col-start-2 flex flex-col justify-center items-center">
-            <h1 className="text-8xl font-sukajan text-center pb-5">
-              Flashcards
-            </h1>
-
-            <p className="font-intervariable text-xl w-150">
-              Look up Japanese words to get dictionary entries right at your
-              fingertips and save them later to learn!
-            </p>
-
-            <p className="font-intervariable text-xl pt-5 w-150">
-              Download the mobile app to get Flashcards on the go or Download on
-              your computer, whatever you like! Use these flashcards to better
-              memorise Japanese words so you can build vocabulary faster!
-            </p>
-          </div>
-        </div>
-      </div>
     </>
   );
 }
