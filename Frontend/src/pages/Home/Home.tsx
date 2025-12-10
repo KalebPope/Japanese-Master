@@ -1,5 +1,6 @@
-import { useRef } from "react";
-import AlternatingText from "../../components/AlternatingText";
+import { useEffect, useRef, useState } from "react";
+import AlternatingText from "../../components/home/AlternatingText";
+import AboutSection from "../../components/home/AboutSection";
 
 export default function Home() {
   const secondPageRef = useRef<HTMLDivElement>(null);
@@ -13,13 +14,64 @@ export default function Home() {
     }
   };
 
+  const [currentSlide, setCurrentSlide] = useState<number>(0);
+
+  useEffect(() => {
+    const elements = document.querySelectorAll(".about-section");
+
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+
+            const index = Number(entry.target.getAttribute("data-slideNumber"))
+            setCurrentSlide(index)
+            entry.target.classList.add("translate-x-0", "opacity-100");
+            entry.target.classList.remove("-translate-x-20", "opacity-0");
+          } else {
+            entry.target.classList.add("-translate-x-20", "opacity-0");
+            entry.target.classList.remove("translate-x-0", "opacity-100");
+          }
+        });
+      },
+      { threshold: 0.5 }
+    );
+    elements.forEach((element) => observer.observe(element));
+
+    return () => {
+      elements.forEach((element) => observer.unobserve(element));
+    };
+  }, []);
+
+  const [canScroll, setCanScroll] = useState<boolean>(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      // Gets how far from the top you've scrolled and the  visible window and if they are greater than the entire document height you have reached the bottom
+      if (
+        window.scrollY + window.innerHeight >=
+        document.documentElement.scrollHeight
+      ) {
+        setCanScroll(true);
+      } else {
+        setCanScroll(false);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
   return (
     <>
       {/*------------*/}
       {/*Landing section*/}
       {/*------------*/}
 
-      <div className="h-calc relative flex flex-col justify-center items-center">
+      <div className="h-screen relative flex flex-col justify-center items-center">
         {/*Semi circle shape*/}
         <div className="absolute bottom-100 left-1/2 -translate-x-1/2 w-192 h-96 bg-red-500 rounded-t-full -z-1"></div>
 
@@ -85,31 +137,40 @@ export default function Home() {
         </div>
       </div>
 
-      {/*------------*/}
-      {/*About section*/}
-      {/*------------*/}
-      <div ref={secondPageRef} className="font-intervariable font-extrabold bg-[url('/images/test.png')] bg-center h-200 flex items-center pl-20">
-          {/*Courses section*/}
-          <div className=" grid grid-cols-2 items-center justify-center">
-            <div className="flex flex-col justify-center items-center">
-              <h1 className="text-8xl font-sukajan text-center pb-5 text-white">
-                Courses
-              </h1>
-
-              <p className="font-intervariable text-xl w-150 text-white">
-                Learn the basics all the way to advanced Japanese through
-                detailed lessons, witten by native Japanese people!
-              </p>
-
-              <p className="font-intervariable text-xl pt-5 w-150 text-white">
-                Each course is structured for the level it is based upon, giving
-                you detailed descriptions, fun quizzes and a sense of completion
-                with progress trackers and trophies for your profile!
-              </p>
-            </div>
-            <img src="images/image.png" className="w-200 h-100 pr-10"></img>
-          </div>
-        </div>
+      <div
+        className={`h-screen snap-y snap-mandatory scroll-hide ${
+          canScroll ? "overflow-y-scroll" : "overflow-hidden"
+        } `}>
+        <AboutSection
+          ref={secondPageRef}
+          brushColour="red-brush.png"
+          title="Courses"
+          paragraphs={[
+            `Learn the basics all the way to advanced Japanese through detailed
+            lessons, witten by native Japanese people!`,
+            `Each course is structured for the level it is based upon, giving you
+            detailed descriptions, fun quizzes and a sense of completion with
+            progress trackers and trophies for your profile!`,
+          ]}
+          middleImage="samurai.png"
+          slideNumber={0}
+          slidesCount={2}
+          currentSlide={currentSlide}
+        />
+        <AboutSection
+          brushColour="blue-brush.png"
+          title="Games"
+          paragraphs={[
+            `Better your understanding with fun games designed to help you learn Better.`,
+            `Learn the Kana and have fun with a memorise type game where you match the sounds
+with the symbol or tackle Kanji with games designed to make them easier to remember!`,
+          ]}
+          middleImage="fish.png"
+          slideNumber={1}
+          slidesCount={2}
+          currentSlide={currentSlide}
+        />
+      </div>
     </>
   );
 }

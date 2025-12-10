@@ -7,7 +7,7 @@ export default function Header() {
   const [dropdown, setDropdown] = useState<boolean | null>(null);
 
   return (
-    <div className="grid grid-cols-[1fr_2fr_1fr] py-5 px-5 text-xl items-center dark:text-white dark:bg-black">
+    <div className="fixed top-0 left-0 z-50  w-full grid grid-cols-[1fr_2fr_1fr] py-5 px-5 text-xl items-center bg-white dark:text-white dark:bg-black">
       <h1 className="font-nuku1 text-red-500 text-3xl">Japanese Master</h1>
       <div className="flex justify-center gap-4">
         <Link to="/home">Home</Link>
