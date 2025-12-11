@@ -1,4 +1,4 @@
-import { RefObject, useState } from "react";
+import { RefObject } from "react";
 
 type PropsType = {
   ref?: RefObject<HTMLDivElement | null>;
@@ -6,13 +6,10 @@ type PropsType = {
   title: string;
   paragraphs: string[];
   middleImage: string;
-  slideNumber: number;
-  slidesCount: number;
-  currentSlide: number
+  slidenumber: number;
 };
 
 export default function AboutSection(props: PropsType) {
-
   return (
     <>
       {/*------------*/}
@@ -20,41 +17,52 @@ export default function AboutSection(props: PropsType) {
       {/*------------*/}
       <div
         ref={props.ref}
-        data-slideNumber={props.slideNumber}
-        className="about-section h-screen relative flex justify-center items-center overflow-hidden snap-center font-intervariable font-extrabold -translate-x-20 opacity-0 transition-all duration-700 ease-out">
+        data-slidenumber={props.slidenumber}
+        className={`h-[200vh] sticky top-0 overflow-hidden font-intervariable font-extrabold bg-white`}>
         {/*Brush*/}
-        <img
-          src={`/images/${props.brushColour}`}
-          className="absolute -bottom-10 left-0 w-600 h-300 -rotate-10"
-        />
+        <div className="h-screen about-section relative -translate-x-20 opacity-0 transition-all duration-700 ease-out flex justify-center items-center">
 
-        <div className="grid grid-cols-[2fr_1fr_2fr] justify-center items-center">
+          <div className="absolute right-10 top-1/2 flex flex-col space-y-2 z-50">
+            {Array.from({ length: 3 }).map((_, index) => (
+              <div
+                key={index}
+                className={`w-3 h-3 ${
+                  index === 12
+                    ? "bg-red-500"
+                    : "border-2 border-red-500 bg-transparent"
+                } rounded-full`}
+              />
+            ))}
+          </div>
+
+          <img
+            src={`/images/home/${props.brushColour}`}
+            className="absolute -bottom-10 left-0 w-600 h-300 -rotate-10"
+          />
+
           {/*Course text and paragraphs*/}
-          <div className="z-10 justify-self-end pt-50">
-            <h1 className="text-8xl font-sukajan text-center pb-5 text-white">
-              {props.title}
-            </h1>
-
-            <div className="">
+          <div className="grid grid-cols-[2fr_1fr_2fr] justify-center items-center">
+            <div className="z-10 justify-self-end pt-50">
+              <h1 className="text-8xl font-sukajan text-center pb-5 text-white">
+                {props.title}
+              </h1>
               {props.paragraphs.map((value, index) => (
                 <p
                   key={index}
-                  className="font-intervariable text-xl w-150 pb-5 text-white">
+                  className="font-intervariable text-xl w-150 pb-2 pt-5 text-white">
                   {value}
                 </p>
               ))}
             </div>
+
+            {/*Middle image*/}
+            <img
+              src={`/images/home/${props.middleImage}`}
+              className={`${
+                props.middleImage == "samurai.png" ? "pl-7" : ""
+              } z-10`}
+            />
           </div>
-
-          {/*Middle image*/}
-          <img src={`/images/${props.middleImage}`} className={`${props.middleImage == "samurai.png" ? "pl-7" : ""} z-10`} />
-        </div>
-
-        {/*Slide selection*/}
-        <div className="absolute right-10 flex flex-col space-y-2">
-          {Array.from({ length: props.slidesCount }).map((value, index) => (
-            <div key={index} className={`w-3 h-3 ${index ===  props.currentSlide ? "bg-red-500" : "border-2 border-red-500 bg-transparent" } rounded-full`}></div>
-          ))}
         </div>
       </div>
     </>
