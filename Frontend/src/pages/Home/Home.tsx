@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import AlternatingText from "../../components/home/AlternatingText";
 import AboutSection from "../../components/home/AboutSection";
+import Footer from "../../components/layout/Footer";
 
 export default function Home() {
   const secondPageRef = useRef<HTMLDivElement>(null);
@@ -161,9 +162,11 @@ export default function Home() {
         />
 
 
-      <div className="z-10 h-[100vh] relative">
-        <div className="w-full h-screen bg-red-500">Next slide</div>
+      <div className="z-10 h-screen relative bg-[url(/images/home/bg2.jpg)]">
+        <h1 className="w-full h-screen flex justify-center items-center text-7xl text-black font-sukajan">Ready to become a Japanese Master?</h1>
       </div>
+
+      <Footer />
     </>
   );
 }

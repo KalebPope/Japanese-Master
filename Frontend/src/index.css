@@ -35,15 +35,25 @@
   src: url("./assets/fonts/Sukajan Brush Demo.otf") format("opentype");
 }
 
+/*geishta*/
+
+@font-face {
+  font-family: Geishta;
+  font-display: swap;
+  src: url("./assets/fonts/geishta.ttf") format("truetype");
+}
+
 @theme {
   /*fonts*/
   --font-nuku1: Nuku1, sans-serif;
   --font-intervariable: Intervariable, sans-serif;
   --font-blastdragon: BlastDragon, sans-serif;
   --font-sukajan: Sukajan, sans-serif;
+  --font-geishta: Geishta, sans-serif;
 
   /*animations*/
   --animate-scroll: scroll-left-to-right 20s linear infinite;
+  --animate-shake: shake 4s infinite;
 }
 
 @layer utilities {
@@ -73,6 +83,20 @@
     transform: translateX(0%);
   }
 }
+
+@keyframes shake {
+  0%, 80%, 100% {
+    transform: translateX(0);
+  }
+  82%, 86% {
+    transform: translateX(-4px);
+  }
+
+  84%, 88% {
+    transform:translateX(4px);
+  }
+}
+
 
 * {
   box-sizing: border-box;
