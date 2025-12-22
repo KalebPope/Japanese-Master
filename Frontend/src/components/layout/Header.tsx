@@ -10,8 +10,8 @@ export default function Header() {
     <div className="fixed top-0 left-0 z-50  w-full grid grid-cols-[1fr_2fr_1fr] py-5 px-5 text-xl items-center bg-white dark:text-white dark:bg-black">
       <h1 className="font-nuku1 text-red-500 text-3xl">Japanese Master</h1>
       <div className="flex justify-center gap-4">
-        <Link to="/home">Home</Link>
-        <Link to="/basics">Courses</Link>
+        <Link to="home">Home</Link>
+        <Link to="courses">Courses</Link>
         <Link to="JLPT">JLPT</Link>
         <Link to="Kanji">Kanji</Link>
         <Link to="Grammar">Grammar</Link>

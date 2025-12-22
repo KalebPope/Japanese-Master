@@ -1,7 +1,8 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import AlternatingText from "../../components/home/AlternatingText";
 import AboutSection from "../../components/home/AboutSection";
 import Footer from "../../components/layout/Footer";
+import { Link } from "react-router-dom";
 
 export default function Home() {
   const secondPageRef = useRef<HTMLDivElement>(null);
@@ -15,9 +16,6 @@ export default function Home() {
     }
   };
 
-  const [currentSlide, setCurrentSlide] = useState<number>(0);
-  const totalSlides = 3;
-
   useEffect(() => {
     const elements = document.querySelectorAll(".about-section");
 
@@ -25,8 +23,6 @@ export default function Home() {
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            const index = Number(entry.target.getAttribute("data-slidenumber"));
-            setCurrentSlide(index);
             entry.target.classList.add("translate-x-0", "opacity-100");
             entry.target.classList.remove("-translate-x-20", "opacity-0");
           } else {
@@ -44,18 +40,17 @@ export default function Home() {
     };
   }, []);
 
-
   return (
     <>
-      {/*------------*/}
+      {/*---------------*/}
       {/*Landing section*/}
-      {/*------------*/}
+      {/*---------------*/}
       <div className="h-screen relative flex flex-col justify-center items-center snap-proximity snap-center">
         {/*Semi circle shape*/}
-        <div className="absolute bottom-100 left-1/2 -translate-x-1/2 w-192 h-96 bg-red-500 rounded-t-full -z-1"></div>
+        <div className="absolute bottom-100 left-1/2 -translate-x-1/2 w-3xl h-96 bg-red-500 rounded-t-full -z-1"></div>
 
         {/*Grid container*/}
-        <div className="max-w-7xl mx-auto grid grid-cols-[2fr_1fr_2fr] place-items-center justify-center items-center gap-4 pb-[100px]">
+        <div className="max-w-7xl mx-auto grid grid-cols-[2fr_1fr_2fr] place-items-center justify-center items-center gap-4 pb-25">
           {/*Left grid column with main text and alternating text*/}
           <div className="text-5xl">
             <h1 className="font-nuku1 text-5xl text-red-500">
@@ -86,9 +81,11 @@ export default function Home() {
 
         <div className="flex gap-30 pb-20">
           {/*Get started button*/}
-          <button className="bg-red-500 hover:bg-red-700 active:bg-red-800 pl-15 pr-15 py-5 rounded-3xl text-white text-xl font-extrabold flex items-center justify-center max-w-50 max-h-20 whitespace-nowrap font-blastdragon">
+          <Link
+            to="courses"
+            className="bg-red-500 hover:bg-red-700 active:bg-red-800 pl-15 pr-15 py-5 rounded-3xl text-white text-xl font-extrabold flex items-center justify-center max-w-50 max-h-20 whitespace-nowrap font-blastdragon">
             <span className=" pt-1">Get Started! </span>
-          </button>
+          </Link>
 
           {/*See more button*/}
           <button
@@ -116,54 +113,62 @@ export default function Home() {
         </div>
       </div>
 
+      {/*-------------*/}
+      {/*About section*/}
+      {/*-------------*/}
+
       {/*Course selection*/}
-
-
-
-        <AboutSection
-          ref={secondPageRef}
-          brushColour="red-brush.png"
-          title="Courses"
-          paragraphs={[
-            `Learn the basics all the way to advanced Japanese through detailed
+      <AboutSection
+        ref={secondPageRef}
+        brushColour="red-brush.png"
+        title="Courses"
+        paragraphs={[
+          `Learn the basics all the way to advanced Japanese through detailed
             lessons, witten by native Japanese people!`,
-            `Each course is structured for the level it is based upon, giving you
+          `Each course is structured for the level it is based upon, giving you
             detailed descriptions, fun quizzes and a sense of completion with
             progress trackers and trophies for your profile!`,
-          ]}
-          middleImage="samurai.png"
-          slidenumber={0}
-        />
+        ]}
+        middleImage="samurai.png"
+        slidenumber={0}
+      />
 
-        {/*Games selection*/}
-        <AboutSection
-          brushColour="blue-brush.png"
-          title="Games"
-          paragraphs={[
-            `Better your understanding with fun games designed to help you learn Better.`,
-            `Learn the Kana and have fun with a memorise type game where you match the sounds
+      {/*Games selection*/}
+      <AboutSection
+        brushColour="blue-brush.png"
+        title="Games"
+        paragraphs={[
+          `Better your understanding with fun games designed to help you learn Better.`,
+          `Learn the Kana and have fun with a memorise type game where you match the sounds
             with the symbol or tackle Kanji with games designed to make them easier to remember!`,
-          ]}
-          middleImage="fish.png"
-          slidenumber={1}
-        />
+        ]}
+        middleImage="fish.png"
+        slidenumber={1}
+      />
 
-        {/*Kanji selection*/}
-        <AboutSection
-          brushColour="purple-brush.png"
-          title="Kanji"
-          paragraphs={[
-            `Learn to understand Kanji form Zero and make wanting to learn Kanji never daunting again!`,
-            `Learn the secrets needed to fully grasp Kanji in a 
+      {/*Kanji selection*/}
+      <AboutSection
+        brushColour="purple-brush.png"
+        title="Kanji"
+        paragraphs={[
+          `Learn to understand Kanji form Zero and make wanting to learn Kanji never daunting again!`,
+          `Learn the secrets needed to fully grasp Kanji in a 
             intuitive way so you can level up your Japanese ability!`,
-          ]}
-          middleImage="kanji.png"
-          slidenumber={2}
-        />
+        ]}
+        middleImage="kanji.png"
+        slidenumber={2}
+      />
 
-
-      <div className="z-10 h-screen relative bg-[url(/images/home/bg2.jpg)]">
-        <h1 className="w-full h-screen flex justify-center items-center text-7xl text-black font-sukajan">Ready to become a Japanese Master?</h1>
+      {/*-------------------*/}
+      {/*Get started section*/}
+      {/*-------------------*/}
+      <div className="z-10 h-screen relative flex flex-col gap-20 justify-center items-center bg-[url(/images/home/bg3.png)] bg-cover">
+        <h1 className="text-7xl text-shadow-lg text-black font-sukajan">
+          Ready to become a Japanese Master?
+        </h1>
+        <h1 className="text-3xl text-shadow-lg text-black font-sukajan">
+          Sign up for free and get started on your Japanese learning journey!
+        </h1>
       </div>
 
       <Footer />
