@@ -129,3 +129,20 @@
 //     </>
 //   );
 // }
+
+      {/* filter and sort stuff <div className="max-w-7xl mx-auto">
+        <div className="grid grid-cols-2">
+          <div className="flex items-center">
+            <span className="material-symbols-outlined">filter_list</span>
+            <label>Filter</label>
+          </div>
+          <div className="flex items-center justify-self-end pr-5 mb-5">
+            <span className="material-symbols-outlined">sort</span>
+            <label>Sort by:</label>
+            <select>
+              <option>Test 1</option>
+              <option>Test 2</option>
+              <option>Test 3</option>
+            </select>
+          </div>
+        </div> */}
