@@ -13,7 +13,7 @@ export default function CardContent({link, imageURL, tags, title, paragraph}: Pr
       <Link to={link} className="select-none">
         <div className="relative w-70 h-100 gap-2 font-intervariable">
           <img
-            src={`images/courses/${imageURL}`}
+            src={`/images/courses/${imageURL}`}
             className="w-70 h-60 mb-2 rounded-t-2xl"
           />
           {tags.map((value, index) => (

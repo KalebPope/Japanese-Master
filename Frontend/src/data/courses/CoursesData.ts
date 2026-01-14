@@ -1,4 +1,4 @@
-type cardDataType = {
+export type cardDataType = {
   link: string;
   imageURL: string;
   tags: string[];
@@ -6,9 +6,17 @@ type cardDataType = {
   paragraph: string;
 };
 
+export const filters: string[] = [
+  "Fundementals",
+  "JLPT N5",
+  "JLPT N4",
+  "Kanji",
+  "Kana",
+];
+
 export const cardData: cardDataType[] = [
   {
-    link: "introduction",
+    link: "kana",
     imageURL: "kodomono.png",
     tags: ["Fundementals", "JLPT N5"],
     title: "Hiragana & Katakana",

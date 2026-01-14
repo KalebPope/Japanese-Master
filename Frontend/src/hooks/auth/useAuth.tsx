@@ -75,7 +75,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       console.log(data);
       setUser(data.user);
       setAccessToken(data.accessToken);
-      navigate("/home");
+      navigate("/");
     } catch (error) {
       if (axios.isAxiosError(error)) {
         console.error("Signup failed:", error.response?.data);
