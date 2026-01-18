@@ -1,4 +1,4 @@
-import CoursesLayout from "../../layouts/CoursesLayout";
+import CoursesLayout from "../../layouts/CourseCardLayout";
 import { filters, cardData } from "../../data/courses/KanaData";
 
 export default function Kana() {

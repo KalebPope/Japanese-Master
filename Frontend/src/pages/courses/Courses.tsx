@@ -1,9 +1,9 @@
-import CoursesLayout from "../../layouts/CoursesLayout";
+import ContentLayout from "../../layouts/CourseListLayout";
 import { filters, cardData } from "../../data/courses/CoursesData";
 
 export default function Courses() {
   return (
-      <CoursesLayout
+      <ContentLayout
         title="Courses"
         japaneseText="コース"
         brushImage="red-brush.png"

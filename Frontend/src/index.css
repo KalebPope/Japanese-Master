@@ -42,6 +42,14 @@
   src: url("./assets/fonts/geishta.ttf") format("truetype");
 }
 
+/*scarfire*/
+
+@font-face {
+  font-family: Scarfire;
+  font-display: swap;
+  src: url("./assets/fonts/scarfire.otf") format("opentype");
+}
+
 /*PottaOne-Regular*/
 
 @font-face {
@@ -57,6 +65,7 @@
   --font-blastdragon: BlastDragon, sans-serif;
   --font-sukajan: Sukajan, sans-serif;
   --font-geishta: Geishta, sans-serif;
+  --font-scarfire: Scarfire, sans-serif;
   --font-pottaone: PottaOne, sans-serif;
 
   /*animations*/

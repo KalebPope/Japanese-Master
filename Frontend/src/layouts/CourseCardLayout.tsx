@@ -2,7 +2,7 @@ import CardContent from "../components/courses/CardContent";
 import SideContent from "../components/courses/SideContent";
 import BannerContent from "../components/courses/BannerContent";
 import { useCourseFilters } from "../hooks/courses/useCourseFilters";
-import { cardDataType } from "../data/courses/CoursesData";
+import { cardDataType } from "../data/courses/KanaData";
 
 type CoursesProps = {
   title: string;
@@ -58,7 +58,7 @@ export default function Courses({
 
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mx-auto max-w-7xl">
             {filteredCards.map((card) => (
-              <CardContent key={card.title} {...card} link={card.link} />
+              <CardContent key={card.title} {...card} />
             ))}
           </div>
         </div>

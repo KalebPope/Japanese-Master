@@ -19,7 +19,7 @@ export const cardData: cardDataType[] = [
     link: "introduction",
     imageURL: "kodomono.png",
     tags: ["Fundementals", "JLPT N5"],
-    title: "Test",
+    title: "Introduction",
     paragraph:
       "Lorem ipsum dolor sit amet consectetur adipisicing elit. Ab sintaspernatur ducimus quia!",
   },
