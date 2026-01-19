@@ -3,7 +3,7 @@ import BannerContent from "../components/courses/BannerContent";
 import { useCourseFilters } from "../hooks/courses/useCourseFilters";
 import { cardDataType } from "../data/courses/CoursesData";
 import ListContent from "../components/courses/ListContent";
-import { userProgressData } from "../data/user/userProgressData";
+import { userProgressCourseData } from "../data/user/userProgressData";
 
 type CoursesProps = {
   title: string;
@@ -59,14 +59,14 @@ export default function Courses({
 
           <div>
             {filteredCards.map((card) => {
-              const courseId = userProgressData.find(
+              const courseId = userProgressCourseData.find(
                 (p) => p.courseId === card.courseId
               );
               const completed = courseId ? courseId.completed : 0;
 
               return (
                 <ListContent
-                  key={card.title}
+                  key={card.courseId}
                   {...card}
                   totalCompleted={completed}
                 />

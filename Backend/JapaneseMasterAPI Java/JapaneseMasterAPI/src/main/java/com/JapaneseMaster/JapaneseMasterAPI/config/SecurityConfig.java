@@ -38,9 +38,9 @@ public class SecurityConfig {
         return http
                 .cors(cors -> cors.configurationSource(corsConfig.corsConfigurationSource()))
                 .csrf((csrf) -> csrf.disable())
-                .authorizeHttpRequests(auth ->
-                        auth.requestMatchers("/api/auth/**")
-                                .permitAll()
+                .authorizeHttpRequests(auth -> auth
+                                .requestMatchers("/api/auth/**").permitAll()
+                                .requestMatchers("/api/course/**").permitAll()
                                 .anyRequest()
                                 .authenticated())
                 .sessionManagement(session ->

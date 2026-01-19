@@ -3,6 +3,7 @@ import SideContent from "../components/courses/SideContent";
 import BannerContent from "../components/courses/BannerContent";
 import { useCourseFilters } from "../hooks/courses/useCourseFilters";
 import { cardDataType } from "../data/courses/KanaData";
+import { userProgressLessonData } from "../data/user/userProgressData";
 
 type CoursesProps = {
   title: string;
@@ -57,9 +58,14 @@ export default function Courses({
           {/*--------------------*/}
 
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mx-auto max-w-7xl">
-            {filteredCards.map((card) => (
-              <CardContent key={card.title} {...card} />
-            ))}
+            {filteredCards.map((card) => {
+              const lessonId = userProgressLessonData.find(
+                (p) => p.lessonId === card.lessonId
+              );
+              const completed = lessonId ? lessonId.completed : 0;
+              
+              return <CardContent key={card.lessonId} {...card} totalCompleted={completed} />;
+            })}
           </div>
         </div>
       </div>
