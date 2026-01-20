@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-import ProgressBar from "./ProgressBar";
 
 type PropsType = {
   link: string;
@@ -10,7 +9,7 @@ type PropsType = {
   totalLessons: number;
 };
 
-export default function CardContent({link, imageURL, title, paragraph, totalCompleted, totalLessons}: PropsType) {
+export default function CourseContent({link, imageURL, title, paragraph}: PropsType) {
     
   
   return (

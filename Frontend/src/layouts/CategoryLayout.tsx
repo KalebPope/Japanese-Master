@@ -1,19 +1,19 @@
-import CardContent from "../components/courses/CardContent";
 import SideContent from "../components/courses/SideContent";
 import BannerContent from "../components/courses/BannerContent";
 import { useCourseFilters } from "../hooks/courses/useCourseFilters";
-import { cardDataType } from "../data/courses/KanaData";
-import { userProgressLessonData } from "../data/user/userProgressData";
+import { categoryDataType } from "../data/courses/CoursesData";
+import CategoryContent from "../components/courses/CategoryContent";
+import { userProgressCourseData } from "../data/user/userProgressData";
 
 type CoursesProps = {
   title: string;
   japaneseText: string;
   brushImage: string;
   filters: string[];
-  cardData: cardDataType[];
+  cardData: categoryDataType[];
 };
 
-export default function Courses({
+export default function CategoryLayout({
   title,
   japaneseText,
   brushImage,
@@ -57,14 +57,20 @@ export default function Courses({
           {/*Card content section*/}
           {/*--------------------*/}
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mx-auto max-w-7xl">
+          <div>
             {filteredCards.map((card) => {
-              const lessonId = userProgressLessonData.find(
-                (p) => p.lessonId === card.lessonId
+              const courseId = userProgressCourseData.find(
+                (p) => p.courseId === card.courseId
               );
-              const completed = lessonId ? lessonId.completed : 0;
-              
-              return <CardContent key={card.lessonId} {...card} totalCompleted={completed} />;
+              const completed = courseId ? courseId.completed : 0;
+
+              return (
+                <CategoryContent
+                  key={card.courseId}
+                  {...card}
+                  totalCompleted={completed}
+                />
+              );
             })}
           </div>
         </div>

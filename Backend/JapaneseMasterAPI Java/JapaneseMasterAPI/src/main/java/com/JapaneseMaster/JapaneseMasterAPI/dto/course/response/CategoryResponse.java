@@ -7,18 +7,18 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class CourseResponse {
-
-    private String courseId;
+public class CategoryResponse {
+    private String categoryId;
 
     private String link;
 
     private String imageURL;
 
-    private String title;
+    private String tags;
 
-    private String paragraph;
+    private String title;
 
     private int totalLessons;
 
+    private String paragraph;
 }

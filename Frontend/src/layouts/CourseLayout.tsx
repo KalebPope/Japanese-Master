@@ -1,27 +1,27 @@
+import CourseContent from "../components/courses/CourseContent";
 import SideContent from "../components/courses/SideContent";
 import BannerContent from "../components/courses/BannerContent";
 import { useCourseFilters } from "../hooks/courses/useCourseFilters";
-import { cardDataType } from "../data/courses/CoursesData";
-import ListContent from "../components/courses/ListContent";
-import { userProgressCourseData } from "../data/user/userProgressData";
+import { courseDataType } from "../data/courses/KanaData";
+import { userProgressLessonData } from "../data/user/userProgressData";
 
 type CoursesProps = {
   title: string;
   japaneseText: string;
   brushImage: string;
   filters: string[];
-  cardData: cardDataType[];
+  cardData: courseDataType[];
 };
 
-export default function Courses({
+export default function CourseLayout({
   title,
   japaneseText,
   brushImage,
   filters,
   cardData,
 }: CoursesProps) {
-  const { activeFilters, filteredCards, filterSort } =
-    useCourseFilters(cardData);
+  // const { activeFilters, filteredCards, filterSort } =
+  //   useCourseFilters(cardData);
 
   return (
     <>
@@ -43,34 +43,28 @@ export default function Courses({
         <div className="relative">
           <aside className="flex flex-col justify-center absolute -left-50">
             <label className="text-3xl">Filters</label>
-            {filters.map((filter) => (
+            {/* {filters.map((filter) => (
               <SideContent
                 key={filter}
                 title={filter}
                 checked={activeFilters.includes(filter)}
                 onChange={() => filterSort(filter)}
               />
-            ))}
+            ))} */}
           </aside>
 
           {/*--------------------*/}
           {/*Card content section*/}
           {/*--------------------*/}
 
-          <div>
-            {filteredCards.map((card) => {
-              const courseId = userProgressCourseData.find(
-                (p) => p.courseId === card.courseId
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mx-auto max-w-7xl">
+            {cardData.map((card) => {
+              const lessonId = userProgressLessonData.find(
+                (p) => p.lessonId === card.lessonId
               );
-              const completed = courseId ? courseId.completed : 0;
-
-              return (
-                <ListContent
-                  key={card.courseId}
-                  {...card}
-                  totalCompleted={completed}
-                />
-              );
+              const completed = lessonId ? lessonId.completed : 0;
+              
+              return <CourseContent key={card.lessonId} {...card} totalCompleted={completed} />;
             })}
           </div>
         </div>

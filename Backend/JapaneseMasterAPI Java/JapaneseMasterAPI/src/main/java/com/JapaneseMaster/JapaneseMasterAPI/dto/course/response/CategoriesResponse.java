@@ -9,8 +9,6 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class CoursesResponse {
-
-    private List<CourseResponse> courses;
-
+public class CategoriesResponse {
+    private List<CategoryResponse> categories;
 }

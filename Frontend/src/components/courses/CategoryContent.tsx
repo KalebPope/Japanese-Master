@@ -12,7 +12,7 @@ type ListContentType = {
   paragraph: string;
 };
 
-export default function ListContent({
+export default function CategoryContent({
   link,
   imageURL,
   title,
