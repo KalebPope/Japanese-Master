@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { categoryDataType } from "../../data/courses/CoursesData";
+import { categoryDataType, filters } from "../../data/courses/CoursesData";
 import { courseDataType } from "../../data/courses/KanaData";
 
 export default function useCourses() {

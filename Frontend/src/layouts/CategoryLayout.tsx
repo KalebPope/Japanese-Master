@@ -5,23 +5,29 @@ import { categoryDataType } from "../data/courses/CoursesData";
 import CategoryContent from "../components/courses/CategoryContent";
 import { userProgressCourseData } from "../data/user/userProgressData";
 
-type CoursesProps = {
+type CategoryProps = {
   title: string;
   japaneseText: string;
   brushImage: string;
-  filters: string[];
-  cardData: categoryDataType[];
+  categoryData: categoryDataType[];
 };
+
+const filters: string[] = [
+  "Fundementals",
+  "JLPT N5",
+  "JLPT N4",
+  "Kanji",
+  "Kana",
+];
 
 export default function CategoryLayout({
   title,
   japaneseText,
   brushImage,
-  filters,
-  cardData,
-}: CoursesProps) {
+  categoryData,
+}: CategoryProps) {
   const { activeFilters, filteredCards, filterSort } =
-    useCourseFilters(cardData);
+    useCourseFilters(categoryData);
 
   return (
     <>
@@ -43,14 +49,16 @@ export default function CategoryLayout({
         <div className="relative">
           <aside className="flex flex-col justify-center absolute -left-50">
             <label className="text-3xl">Filters</label>
-            {filters.map((filter) => (
-              <SideContent
-                key={filter}
-                title={filter}
-                checked={activeFilters.includes(filter)}
-                onChange={() => filterSort(filter)}
-              />
-            ))}
+         
+              {filters.map((filter) => (
+                <SideContent
+                  key={filter}
+                  title={filter}
+                  checked={activeFilters.includes(filter)}
+                  onChange={() => filterSort(filter)}
+                />
+              ))
+            }
           </aside>
 
           {/*--------------------*/}
@@ -60,7 +68,7 @@ export default function CategoryLayout({
           <div>
             {filteredCards.map((card) => {
               const courseId = userProgressCourseData.find(
-                (p) => p.courseId === card.courseId
+                (p) => p.courseId === card.courseId,
               );
               const completed = courseId ? courseId.completed : 0;
 
