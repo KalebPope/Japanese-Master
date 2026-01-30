@@ -1,9 +1,10 @@
 import { Route, Routes } from "react-router-dom";
-import Home from "../pages/home/Home";
-import Signup from "../pages/auth/Signup";
+import Home from "../pages/Home/Home";
+import Signup from "../pages/Auth/Signup";
 import Courses from "../pages/courses/Courses";
 import Kana from "../pages/courses/Kana";
 import Introduction from "../pages/courses/immersion/Introduction";
+import Hiragana from "../pages/courses/immersion/Hiragana";
 
 export default function RouteConfig() {
   return (
@@ -20,6 +21,7 @@ export default function RouteConfig() {
           <Route path="kana"> 
             <Route index element={<Kana />} />
             <Route path="introduction" element={<Introduction />} />
+            <Route path="hiragana-1" element={<Hiragana />} />
           </Route>
 
         </Route>

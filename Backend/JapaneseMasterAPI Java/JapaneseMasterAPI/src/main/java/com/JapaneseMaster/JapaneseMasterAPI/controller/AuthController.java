@@ -41,4 +41,5 @@ public class AuthController {
     public ResponseEntity<RefreshResponse> refresh(HttpServletRequest request, HttpServletResponse response) {
         return ResponseEntity.ok(authService.refresh(request, response));
     }
+
 }
