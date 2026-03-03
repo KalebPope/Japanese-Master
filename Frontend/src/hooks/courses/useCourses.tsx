@@ -59,7 +59,7 @@ export default function useCourses() {
 
       } catch (error) {
         if (axios.isAxiosError(error)) {
-          console.error("Signup failed:", error.response?.data);
+          console.error("Signup failed:", error.response?.data); 
         }
       }
     };

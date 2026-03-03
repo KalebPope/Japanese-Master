@@ -1,4 +1,5 @@
 import Footer from "../../../components/layout/Footer";
+import KanaChart, { hiragana } from "../../../components/lessons/KanaChart";
 
 export default function Hiragana() {
     return (
@@ -6,8 +7,8 @@ export default function Hiragana() {
             <div className="flex flex-col max-w-7xl items-center mx-auto mt-30 font-medium font-intervariable">
         
               <h1 className="text-7xl font-black pt-5 text-red-500">Hiragana 1: あいうえお column</h1>
-              <h3 className="text-lg font-medium ">Last updated: 7:18pm</h3>
-              <img src="/images/courses/Lessons/Introduction/Natsumatsuri.jpg" className="w-150 h-150"></img>
+              <h3 className="text-lg font-medium ">Note: This page is a work in progress...</h3>
+              <img src="/images/courses/Lessons/hira-1/a.png" className="w-100 h-100"></img>
         
               <p className="pt-10 max-w-200 text-lg"> In the previous lesson, we learnt about the 3 writing systems that 
                 go into Japanese. Now we are going to go in-depth into the first script Hiragana! </p>
@@ -21,7 +22,7 @@ export default function Hiragana() {
                 <h1 className="text-4xl pt-5 font-black text-red-500 font-intervariable">Recap: The Hiragana Chart and What is Hiragana?</h1>
         
         <div className="pt-10 text-md">  
-           <img src="/images/courses/Lessons/Introduction/Japan.jpg" className="w-100 h-100 self-start float-left mr-4"></img>
+           <img src="/images/courses/Lessons/hira-1/inochi.png" className="w-50 h-50 self-start float-left mr-4"></img>
                 <p className=" max-w-200  font-intervariable text-black font-medium">Down below is the Hiragana chart.
                    <p className=" pt-5 max-w-200  font-intervariable text-black font-medium"
             >Each column has 5 characters, each corresponding to each of the 5 vowels in Japanese, being A I U E and O.  </p>
@@ -29,10 +30,10 @@ export default function Hiragana() {
                   In this lesson and the future Hiragana lessons, we are going to learn each row and learn how to pronounce it, write it and recognise it.  </p> 
                 </p>
                 <p className=" pt-5 max-w-200 font-intervariable text-black font-medium"></p> 
-        
+       
         
         </div>
-             
+              <KanaChart kanaData={hiragana} title="Hiragana" />
                   
         
                 <h1 className="text-4xl pt-10 font-black text-red-500 font-intervariable">First Character: あ</h1>
@@ -47,7 +48,7 @@ export default function Hiragana() {
                       <p className="pt-5 max-w-200 text-lg">Hiragana is the first of these writing systems and its the first one most beginners learn. It consists of 46 phonetic characters, which have sounds attached to them and are used mainly for grammatical endings, 
                         native words and furigana. <small className="italic">(we will learn about furigana in later lessons.)</small>  </p>
                       <p className="pt-5 max-w-200 text-lg">Attatched below is a full chart of the basic Hiragana characters that one must learn to read Hiragana: </p>
-                      <img src="/images/courses/Lessons/Introduction/Hiragana-chart.png" className="w-100 h-150"></img>
+                      <KanaChart kanaData={hiragana} title="Hiragana"/>
                       <a href="https://www.busuu.com/en/japanese/alphabet/hiragana" className="text-md text-blue-400 underline italic">Make your own later</a>
                        <p className="pt-5 max-w-200 text-lg">Each of these with the exeption of the vowels and a few other characters are made with a constanant and vowel pair. 
                         What this means is that each row starts with its respective vowel, e.g. K and ends in a vowel e.g. a. join them together to get Ka! </p>

@@ -1,6 +1,6 @@
 import { Route, Routes } from "react-router-dom";
-import Home from "../pages/Home/Home";
-import Signup from "../pages/Auth/Signup";
+import Home from "../pages/home/Home";
+import Signup from "../pages/auth/Signup";
 import Courses from "../pages/courses/Courses";
 import Kana from "../pages/courses/Kana";
 import Introduction from "../pages/courses/immersion/Introduction";

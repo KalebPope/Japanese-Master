@@ -1,4 +1,6 @@
+import { Link } from "react-router-dom";
 import Footer from "../../../components/layout/Footer";
+import KanaChart, { hiragana, katakana } from "../../../components/lessons/KanaChart";
 
 
 export default function Introduction() {
@@ -8,7 +10,7 @@ export default function Introduction() {
 
       <h1 className="text-7xl font-black pt-5 text-red-500">Introduction</h1>
       <h2 className="text-3xl font-extrabold">Welcome to the Japanese Language!</h2>
-      <h3 className="text-lg font-medium ">Last updated: 7:18pm</h3>
+      <h3 className="text-lg font-medium ">Note: This page is a work in progress...</h3>
       <img src="/images/courses/Lessons/Introduction/Natsumatsuri.jpg" className="w-150 h-150"></img>
 
       <p className="pt-10 max-w-200 text-lg"> <strong>Picture this.</strong> You have been watching your favourite anime or wanting to talk to some Japanese locals on your
@@ -47,8 +49,7 @@ export default function Introduction() {
               <p className="pt-5 max-w-200 text-lg">Hiragana is the first of these writing systems and its the first one most beginners learn. It consists of 46 phonetic characters, which have sounds attached to them and are used mainly for grammatical endings, 
                 native words and furigana. <small className="italic">(we will learn about furigana in later lessons.)</small>  </p>
               <p className="pt-5 max-w-200 text-lg">Attatched below is a full chart of the basic Hiragana characters that one must learn to read Hiragana: </p>
-              <img src="/images/courses/Lessons/Introduction/Hiragana-chart.png" className="w-100 h-150"></img>
-              <a href="https://www.busuu.com/en/japanese/alphabet/hiragana" className="text-md text-blue-400 underline italic">Make your own later</a>
+            <KanaChart kanaData={hiragana} title="Hiragana"/>
                <p className="pt-5 max-w-200 text-lg">Each of these with the exeption of the vowels and a few other characters are made with a constanant and vowel pair. 
                 What this means is that each row starts with its respective vowel, e.g. K and ends in a vowel e.g. a. join them together to get Ka! </p>
                  <h2 className="pt-5 max-w-200 text-3xl text-red-500 font-extrabold">Pronounciation</h2>
@@ -69,7 +70,7 @@ export default function Introduction() {
                    </ul>
                    </p>
                    <p className="pt-5 max-w-200 text-lg">Attatched below is a full chart of the basic Katakana characters that one must learn to read Katakana: </p>
-                   <img src="/images/courses/Lessons/Introduction/Hiragana-chart.png" className="w-100 h-150"></img>
+                   <KanaChart kanaData={katakana} title="Katakana"/>
               <h1 className="text-4xl pt-5 font-black text-red-500 font-intervariable">Writing system #3: Kanji</h1>
               <h1 className="text-[200px]">日本</h1>
              <h2>- An example of a Kanji word: Japan</h2>
@@ -83,6 +84,7 @@ export default function Introduction() {
 <p className="pt-5 max-w-200 text-lg">Now that we have seen the 3 writing systems, its time to see them all together in an example sentence.
               </p>
 
+
               <p className="pt-5 max-w-200 text-5xl">
               <span className="text-red-500">私</span>
               <span className="text-green-500">は</span>
@@ -91,6 +93,14 @@ export default function Introduction() {
               <span className="text-red-500">見</span>
               <span className="text-green-500">ます</span>
               </p>
+               <p className="pt-5 max-w-200 text-lg">
+                      <span className="text-red-500">I</span>
+                      <span className="text-green-500">(Topic Marker)</span>
+                      <span className="text-yellow-300">TV</span>
+                      <span className="text-green-500">(Direct Object)</span>
+                      <span className="text-red-500">Watch</span>
+                      <span className="text-green-500">(Present Tense)</span>
+                      </p>
 <p className="pt-5 max-w-200 text-lg">Translation: I watch TV.
               </p>
 
@@ -111,10 +121,10 @@ export default function Introduction() {
 
                 <h1 className="text-4xl pt-5 font-black text-red-500 font-intervariable">What we learnt this lesson:</h1>
                 <p className="pt-5 max-w-200 text-lg">This lesson we learnt about why you should learn Japanese and the three writing systems in use: Hiragana, Katakana and Kanji. </p>
-                  <p className="pt-5 max-w-200 text-lg"> In the next lesson we will dive into learning our first
-                  few characters of Hiragana!
-              </p>
-
+                  <p className="pt-5 min-w-200 text-lg">In the next lesson we will dive into learning our first
+                  few characters of Hiragana! </p>
+                  <Link to="../hiragana-1" reloadDocument>Hiragana</Link>
+          
       </div>
       <Footer />
     </>
