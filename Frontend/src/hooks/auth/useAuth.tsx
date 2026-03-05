@@ -33,6 +33,8 @@ type AuthContextType = {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
+const API_URL = import.meta.env.VITE_BACKEND_API_URL
+
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [accessToken, setAccessToken] = useState<string | null>(null);
@@ -45,7 +47,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       const refresh = async () => {
         try {
           const { data } = await axios.post<AuthResponse>(
-            "http://localhost:8080/api/auth/refresh",
+            `${API_URL}/api/auth/refresh`,
             {},
             { withCredentials: true }
           );
@@ -68,7 +70,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
     try {
       const { data } = await axios.post<AuthResponse>(
-        "http://localhost:8080/api/auth/signup",
+        `${API_URL}/api/auth/signup`,
         signupData,
         { withCredentials: true }
       );

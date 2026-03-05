@@ -1,7 +1,9 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { categoryDataType, filters } from "../../data/courses/CoursesData";
+import { categoryDataType } from "../../data/courses/CoursesData";
 import { courseDataType } from "../../data/courses/KanaData";
+
+const API_URL = import.meta.env.VITE_BACKEND_API_URL
 
 export default function useCourses() {
   const [categories, setCategories] = useState<categoryDataType[]>([]);
@@ -11,7 +13,7 @@ export default function useCourses() {
     const fetchCategories = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:8080/api/course/getcategorydata",
+          `${API_URL}/api/course/getcategorydata`,
         );
         const data = response.data;
 
@@ -41,7 +43,7 @@ export default function useCourses() {
     const fetchCourses = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:8080/api/course/getcoursedata",
+          `${API_URL}/api/course/getcoursedata`,
         );
         const data = response.data;
 
